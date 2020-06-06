@@ -1,0 +1,26 @@
+{
+  "name": "water",
+  "version": "1.0.0",
+  "description": "Water simulation",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "webpack ./src/world.js --output lib/index.js -d --watch",
+    "build": "webpack ./src/world.js --output lib/index.js -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "water",
+    "droplets",
+    "rain",
+    "simulation"
+  ],
+  "author": "Metwas",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "broadleaf": "git+https://github.com/Metwas/broadleaf.git"
+  }
+}
