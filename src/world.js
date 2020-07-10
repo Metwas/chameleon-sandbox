@@ -61,8 +61,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = 800;
+    const height = 500;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
@@ -76,7 +76,7 @@ window.onload = function () {
     ctx = canvas.getContext("2d");
 
     // attempt to run at 120 fps
-    let fps = (1000 / 120);
+    let fps = (1000 / 60);
     // create global context for the script template
     let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
