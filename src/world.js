@@ -25,6 +25,8 @@
 const { utils } = require("broadleaf");
 // import water script
 const water = require("./scripts/water");
+// import ripple script
+const ripple = require("./scripts/ripple");
 // import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
@@ -32,7 +34,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = sierpinskiCarpet;
+let script = ripple;
 
 /**
  * Global context options
@@ -73,8 +75,8 @@ window.onload = function () {
     // get context
     ctx = canvas.getContext("2d");
 
-    // attempt to run at 2 fps
-    let fps = (1000 / 2);
+    // attempt to run at 120 fps
+    let fps = (1000 / 120);
     // create global context for the script template
     let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
@@ -128,10 +130,8 @@ const M_FRAME = function (loop, fps, canvas, ctx, options) {
  * @param {Event} event
  */
 window.onresize = function (event) {
-
     // update dimensions
     canvas.setAttribute("width", window.innerWidth);
     canvas.setAttribute("height", window.innerHeight);
-
 };
 
