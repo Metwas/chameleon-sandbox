@@ -23,7 +23,6 @@
 
 // import utilities
 const { utils, math } = require("broadleaf");
-const { random } = require("broadleaf/lib/math/math");
 
 //======================== End Imports ========================//
 
@@ -44,10 +43,10 @@ module.exports = function (canvas, ctx, options) {
     let current = [];
     let previous = [];
     // ripple damping
-    let damping = 0.88;
+    let damping = 0.92;
 
     let fishes = [];
-    let fishCount = 3;
+    let fishCount = 1;
 
     let useNoise = true;
     let simplex = null;
@@ -55,7 +54,7 @@ module.exports = function (canvas, ctx, options) {
     let fish_radius = 1;
     let fish_speed = 0.1;
     let angle = 0;
-    let factor = 0.12;
+    let factor = 0.32;
 
     /**
      * Vector argument validator
@@ -225,14 +224,14 @@ module.exports = function (canvas, ctx, options) {
      */
     const raindrop = function (delay) {
 
-        const rndWidth = Math.floor(random(10, width - 10));
-        const rndHeight = Math.floor(random(10, height - 10));
+        const rndWidth = Math.floor(math.random(10, width - 10));
+        const rndHeight = Math.floor(math.random(10, height - 10));
 
         // assign a value to a random index
         current[rndHeight][rndWidth] = 255;
 
         // re-initialize timer
-        setTimeout(raindrop.bind(this), delay, random(1000, 10000));
+        setTimeout(raindrop.bind(this), delay, math.random(1000, 10000));
 
     };
 
@@ -265,8 +264,8 @@ module.exports = function (canvas, ctx, options) {
 
             } else {
 
-                x = Math.floor(random(fish_radius + 1, width - fish_radius - 1));
-                y = Math.floor(random(fish_radius + 1, height - fish_radius - 1));
+                x = Math.floor(math.random(fish_radius + 1, width - fish_radius - 1));
+                y = Math.floor(math.random(fish_radius + 1, height - fish_radius - 1));
 
             }
 
@@ -276,7 +275,7 @@ module.exports = function (canvas, ctx, options) {
         }
 
         // re-initialize timer
-        setTimeout(fishy.bind(this), delay, random(1000, 10000));
+        setTimeout(fishy.bind(this), delay, math.random(1000, 10000));
 
     };
 
@@ -315,8 +314,8 @@ module.exports = function (canvas, ctx, options) {
 
             for (let index = 0; index < fishCount; index++) {
 
-                let fish_x = Math.floor(random(fish_radius + 1, width - fish_radius - 1) * index);
-                let fish_y = Math.floor(random(fish_radius + 1, height - fish_radius - 1) * index);
+                let fish_x = Math.floor(math.random(fish_radius + 1, width - fish_radius - 1) * index);
+                let fish_y = Math.floor(math.random(fish_radius + 1, height - fish_radius - 1) * index);
 
                 fishes.push(new fish(math.Vector2(fish_x, fish_y), fish_radius, fish_speed));
 
@@ -328,10 +327,10 @@ module.exports = function (canvas, ctx, options) {
             }
 
             // setup fishy timer
-            fishy(2750);
+            fishy(50);
 
             // setup raindrop effect
-            //raindrop(1000);
+            raindrop(1000);
 
         },
 
@@ -375,7 +374,7 @@ module.exports = function (canvas, ctx, options) {
                     data[index] = current[y][x] * 255;
                     data[index + 1] = current[y][x] * 255;
                     data[index + 2] = current[y][x] * 255;
-                    data[index + 3] = 25;
+                    data[index + 3] = 255;
 
                 }
 
