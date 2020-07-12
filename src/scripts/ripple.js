@@ -43,18 +43,18 @@ module.exports = function (canvas, ctx, options) {
     let current = [];
     let previous = [];
     // ripple damping
-    let damping = 0.92;
+    let damping = 0.88;
 
     let fishes = [];
     let fishCount = 1;
 
-    let useNoise = true;
+    let useNoise = false;
     let simplex = null;
 
     let fish_radius = 1;
     let fish_speed = 0.1;
     let angle = 0;
-    let factor = 0.32;
+    let factor = 0.12;
 
     /**
      * Vector argument validator
@@ -224,14 +224,14 @@ module.exports = function (canvas, ctx, options) {
      */
     const raindrop = function (delay) {
 
-        const rndWidth = Math.floor(math.random(10, width - 10));
-        const rndHeight = Math.floor(math.random(10, height - 10));
+        const rndWidth = Math.floor(math.random(20, width - 20));
+        const rndHeight = Math.floor(math.random(20, height - 20));
 
         // assign a value to a random index
         current[rndHeight][rndWidth] = 255;
 
         // re-initialize timer
-        setTimeout(raindrop.bind(this), delay, math.random(1000, 10000));
+        setTimeout(raindrop.bind(this), delay, delay);
 
     };
 
@@ -246,7 +246,6 @@ module.exports = function (canvas, ctx, options) {
         let index = 0;
         
         // update damping
-        damping = 0.9;
 
         for (; index < length; index++) {
 
@@ -275,7 +274,7 @@ module.exports = function (canvas, ctx, options) {
         }
 
         // re-initialize timer
-        setTimeout(fishy.bind(this), delay, math.random(1000, 10000));
+        setTimeout(fishy.bind(this), delay, delay);
 
     };
 
@@ -327,10 +326,9 @@ module.exports = function (canvas, ctx, options) {
             }
 
             // setup fishy timer
-            fishy(50);
-
+            fishy(550);
             // setup raindrop effect
-            raindrop(1000);
+            raindrop(550);
 
         },
 

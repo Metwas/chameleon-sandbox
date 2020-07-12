@@ -23,8 +23,8 @@
 
 // import utilities
 const { utils } = require("broadleaf");
-// import water script
-const water = require("./scripts/water");
+// import noise script
+const noise = require("./scripts/noise");
 // import ripple script
 const ripple = require("./scripts/ripple");
 // import sierspinski carpet
@@ -34,7 +34,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = ripple;
+let script = noise;
 
 /**
  * Global context options
@@ -61,8 +61,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = 500;
+    const height = 500;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
