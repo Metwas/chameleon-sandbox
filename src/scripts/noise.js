@@ -112,7 +112,7 @@ module.exports = function (canvas, ctx, options) {
             };
 
             // initialize simplex noise
-            simplex = math.createNoise(255);
+            simplex = math.createNoise();
 
         },
 
@@ -129,10 +129,14 @@ module.exports = function (canvas, ctx, options) {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // get current image data from the canvas
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
 
-            pos += 0.02;
+            r = 15;
+            g = 12;
+            b = 100;
+
+            pos += 0.0008;
             yoff = pos;
             // map out buffers into pixel array for the canvas to load
             for (let y = 0; y < height; y++) {
@@ -142,23 +146,25 @@ module.exports = function (canvas, ctx, options) {
                 for (let x = 0; x < width; x++) {
 
                     xoff += inc;
-                    
+
                     // create noise of various frequencies (octaves)
-                    const n = simplex.noise(pos, yoff);
+                    const n = simplex.noise(pos * 2, yoff);
                     const n2 = 0.5 * simplex.noise(2 * xoff, 2 * yoff);
                     const n3 = 0.25 * simplex.noise(4 * xoff, 4 * yoff);
                     const n4 = 0.125 * simplex.noise(8 * xoff, 8 * yoff);
                     const n5 = 0.0625 * simplex.noise(16 * xoff, 16 * yoff);
+                    const n6 = 0.03125 * simplex.noise(16 * xoff, 32 * yoff);
+                    const n7 = 0.015625 * simplex.noise(64 * xoff, 64 * yoff);
 
                     // map noise values from -1,1 to brightness 0-255
-                    const brightness = math.map((n + n2 + n3), -1,1, 0, 255);
-                    
+                    const brightness = math.map((n + n2 + n3 + n4 + n5 + n6 + n7), -1, 1, 0, 255);
+
                     // get current index as one-dimensional
                     const index = (y * width + x) * 4;
                     // add to image buffer
-                    data[index] = brightness;
-                    data[index + 1] = brightness;
-                    data[index + 2] = brightness;
+                    data[index] = brightness % r;
+                    data[index + 1] = brightness % g;
+                    data[index + 2] = brightness % b;
                     data[index + 3] = 255;
 
                 }
