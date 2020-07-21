@@ -21,6 +21,8 @@
 
 //======================== Imports ========================//
 
+// import boid body
+const boidBody = require("./boidBody");
 // import utilities
 const { utils, math } = require("broadleaf");
 
@@ -29,23 +31,47 @@ const { utils, math } = require("broadleaf");
 /**
  * Represents a single boid (bird) within a flock
  * 
- * @param {Number} x 
- * @param {Number} y 
+ * @param {IBoidBody} body 
  */
-function boid(x, y) {
+function boid(body) {
 
-    /**
-     * Position as a vector for this @see boid
-     * 
-     * @type {math.Vector2}
-     */
-    this.position = new math.Vector2(x, y);
+    let _body = null;
+    Object.defineProperty(this, "body", {
+        get() {
+            return _body;
+        },
+        set(value) {
 
-    /**
-     * Velocity as random vector for this @see boid
-     * 
-     * @type {Number}
-     */
-    this.velocity = math.Vector2.random();
+            /** ensure instance is of @see boidBody */
+            if (!utils.isInstanceOf(value, boidBody)) {
+                throw new Error("Invalid boid body type received");
+            }
+
+            _body = value;
+
+        }
+    });
+    this.body = body;
 
 }
+
+/**
+ * Define @see boid prototype
+ */
+boid.prototype = {
+
+    update: function (vx, vy) {
+
+        this.body.draw();
+        this.body.velocity.x = vx;
+        this.body.velocity.y = vy;
+
+    }
+
+};
+
+//======================== Exports ========================//
+
+module.exports = boid;
+
+//======================== End Exports ========================//

@@ -23,6 +23,8 @@
 
 // import utilities
 const { utils } = require("broadleaf");
+// import boid script
+const boid = require("./scripts/boids");
 // import noise script
 const noise = require("./scripts/noise");
 // import ripple script
@@ -34,7 +36,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = noise;
+let script = boid;
 
 /**
  * Global context options
@@ -61,8 +63,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = 128;
-    const height = 64;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
