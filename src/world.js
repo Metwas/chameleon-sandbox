@@ -29,6 +29,8 @@ const boid = require("./scripts/boids");
 const noise = require("./scripts/noise");
 // import ripple script
 const ripple = require("./scripts/ripple");
+// import isoSurface script
+const isosurface = require("./scripts/isosurface");
 // import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
@@ -36,7 +38,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = boid;
+let script = isosurface;
 
 /**
  * Global context options
@@ -63,8 +65,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = 128;
+    const height = 32;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
