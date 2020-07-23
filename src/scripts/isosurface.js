@@ -45,7 +45,13 @@ module.exports = function (canvas, ctx, options) {
     let blobs = [];
     let blobCount = 10;
 
-    let factor = 0;
+    let r_angle = 0;
+    let g_angle = 0;
+    let b_angle = 0;
+    let t_angle = 0;
+    let r_target = 0;
+    let g_target = 0;
+    let b_target = 0;
 
     // simplex noise
     let noise = null;
@@ -97,6 +103,10 @@ module.exports = function (canvas, ctx, options) {
                 mouseY = event.offsetY || event.layerY;
             };
 
+            r_target = math.random(100, 255);
+            g_target = math.random(100, 255);
+            b_target = math.random(100, 255);
+
             min = Math.min(width, height);
 
             // initialize boid body
@@ -131,6 +141,27 @@ module.exports = function (canvas, ctx, options) {
             const xLength = width * 4;
             const yLength = height * 4;
 
+            t_angle+=0.01;
+
+            if(t_angle > 1){
+                t_angle = 0;
+            }
+            //r_angle = math.lerp(r_angle, r_target, t_angle);
+            g_angle = math.lerp(r_angle, g_target, t_angle);
+            b_angle = math.lerp(r_angle, b_target, t_angle);
+
+            if(r_angle >= r_target){
+                r_target = math.random(10, 20);
+            }
+
+            if(g_angle >= g_target){
+                g_target = math.random(10, 20);
+            }
+
+            if(b_angle >= b_target){
+                b_target = math.random(10, 20);
+            }
+
             for (let y = 0; y < yLength; y += 4) {
 
                 for (let x = 0; x < xLength; x += 4) {
@@ -154,8 +185,8 @@ module.exports = function (canvas, ctx, options) {
                     // red channel
                     pixels[index] = iso;
                     // green channel
-                    pixels[index + 1] = 255 - (iso % 195);
-                    pixels[index + 2] = 255 - (iso % 140);
+                    pixels[index + 1] = 125 - (iso % g_angle);
+                    pixels[index + 2] = 125 - (iso % b_angle);
                     // alpha channel
                     pixels[index + 3] = 255;
 
