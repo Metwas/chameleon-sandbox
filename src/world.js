@@ -31,6 +31,8 @@ const noise = require("./scripts/noise");
 const ripple = require("./scripts/ripple");
 // import isoSurface script
 const isosurface = require("./scripts/isosurface");
+// import marching cubes
+const marchingCubes = require("./scripts/marchingcubes");
 // import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
@@ -38,7 +40,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = isosurface;
+let script = marchingCubes;
 
 /**
  * Global context options
@@ -65,8 +67,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = 128;
-    const height = 32;
+    const width = 400;
+    const height = 300;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
@@ -80,7 +82,7 @@ window.onload = function () {
     ctx = canvas.getContext("2d");
 
     // attempt to run at 120 fps
-    let fps = (1000 / 60);
+    let fps = 0;
     // create global context for the script template
     let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
@@ -110,7 +112,7 @@ const M_FRAME = function (loop, fps, canvas, ctx, options) {
 
         _loop.call(null, _canvas, _ctx, _options);
         // render another frame
-        window.requestAnimationFrame(M_FRAME);
+        window.requestAnimationFrame(M_REQUEST_FRAME);
 
     };
 
