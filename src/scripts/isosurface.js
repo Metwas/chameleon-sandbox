@@ -29,7 +29,7 @@ const { utils, math } = require("broadleaf");
 //======================== End Imports ========================//
 
 /**
- * Flocking simulation
+ * ISO surface (metaball) simulation
  * 
  * @author Metwas
  * 
@@ -59,9 +59,7 @@ module.exports = function (canvas, ctx, options) {
     // octave noise detail
     let noiseDetail = 8;
 
-    /**
-     * Return chameleon sketch template
-     */
+    /** Return chameleon sketch template */
     return {
 
         /**
@@ -141,24 +139,24 @@ module.exports = function (canvas, ctx, options) {
             const xLength = width * 4;
             const yLength = height * 4;
 
-            t_angle+=0.01;
+            t_angle += 0.01;
 
-            if(t_angle > 1){
+            if (t_angle > 1) {
                 t_angle = 0;
             }
             //r_angle = math.lerp(r_angle, r_target, t_angle);
             g_angle = math.lerp(r_angle, g_target, t_angle);
             b_angle = math.lerp(r_angle, b_target, t_angle);
 
-            if(r_angle >= r_target){
+            if (r_angle >= r_target) {
                 r_target = math.random(10, 20);
             }
 
-            if(g_angle >= g_target){
+            if (g_angle >= g_target) {
                 g_target = math.random(10, 20);
             }
 
-            if(b_angle >= b_target){
+            if (b_angle >= b_target) {
                 b_target = math.random(10, 20);
             }
 
@@ -197,12 +195,11 @@ module.exports = function (canvas, ctx, options) {
             // update canvas pixels
             ctx.putImageData(imageData, 0, 0);
 
-
             const length = blobs.length;
             let _index = 0;
 
             for (; _index < length; _index++) {
-                
+
                 // update blobs
                 blobs[_index].update({
                     width: width,
