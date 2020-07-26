@@ -67,8 +67,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = 400;
-    const height = 300;
+    const width = 128;
+    const height = 32;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");

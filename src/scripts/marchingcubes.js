@@ -42,11 +42,14 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 10;
+    let resolution = 5;
 
     let fields = [];
     let yoff = 0;
     let xoff = 0;
+    let angle = 0;
+
+    let hue = 0;
 
     // simplex noise
     let noise = null;
@@ -62,66 +65,21 @@ module.exports = function (canvas, ctx, options) {
      */
     let line = function (x0, x1, color, weight) {
 
-        this.lineWidth = math.map(resolution, 10, 50, 2, 6);
-        this.strokeStyle = color || "white";
+        if ((hue += (resolution * 0.0001)) > 360) {
+            hue = resolution;
+        }
 
-        this.moveTo(x0.x, x0.y);
-        this.lineTo(x1.x, x1.y);
+        this.lineWidth = 1;
+        this.strokeStyle = "hsla(" + hue + ",50%,50%, 1)"; 
 
-    };
-
-    // drawing states
-    const states = {
-        "0": utils.noop,
-        "1": function (a, b, c, d) {
-            line(c, d);
-        },
-        "2": function (a, b, c, d) {
-            line(b, c);
-        },
-        "3": function (a, b, c, d) {
-            line(b, d);
-        },
-        "4": function (a, b, c, d) {
-            line(a, b);
-        },
-        "5": function (a, b, c, d) {
-            line(a, d);
-            line(b, c);
-        },
-        "6": function (a, b, c, d) {
-            line(a, c);
-        },
-        "7": function (a, b, c, d) {
-            line(a, d);
-        },
-        "8": function (a, b, c, d) {
-            line(a, d);
-        },
-        "9": function (a, b, c, d) {
-            line(a, c);
-        },
-        "10": function (a, b, c, d) {
-            line(a, b);
-            line(c, d);
-        },
-        "11": function (a, b, c, d) {
-            line(a, b);
-        },
-        "12": function (a, b, c, d) {
-            line(b, d);
-        },
-        "13": function (a, b, c, d) {
-            line(b, c);
-        },
-        "14": function (a, b, c, d) {
-            line(c, d);
-        },
+        this.moveTo(x1.x, x1.y);
+        this.lineTo(x0.x, x0.y);
+        this.stroke();
 
     };
 
     const getState = function (a, b, c, d) {
-        return (a * 8) + (b * 4) + (c * 2) + (d * 1)
+        return a * 8 + b * 4 + c * 2 + d * 1;
     };
 
     /** Return chameleon sketch template */
@@ -171,12 +129,14 @@ module.exports = function (canvas, ctx, options) {
             };
 
             // create a multidimensional array
-            for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
 
-                fields[y] = [];
-                for (let x = 0; x < cols; x++) {
-                    fields[y].push(math.random(0, 1, true));
+                const k = [];
+                for (let y = 0; y < rows; y++) {
+                    k.push(0);
                 }
+
+                fields.push(k);
 
             }
 
@@ -191,45 +151,100 @@ module.exports = function (canvas, ctx, options) {
          */
         loop: function (canvas, ctx, options) {
 
-            ctx.fillStyle = "steelblue";
+            ctx.fillStyle = "black";
             ctx.fillRect(0, 0, width, height);
 
+            xoff += 0.0001;
+            
             // draw grid
-            for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
 
-                for (let x = 0; x < cols; x++) {
+                angle+=(0.0003 * x);
+                for (let y = 0; y < cols; y++) {
 
                     // get field value (0 OR 1)
-                    const value = fields[y][x] * 255;
+                    const value = fields[x][y] * 255;
 
-                    ctx.lineWidth = resolution * 0.5;
-                    ctx.strokeStyle = `rgb(${value},${value},${value})`;
-                    ctx.strokeRect((x * resolution) + (ctx.lineWidth / 2), (y * resolution) + (ctx.lineWidth / 2), 1, 1);
+                    ctx.lineWidth = resolution;
+                    ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%,50%, 1)";
+                    // ctx.arc((x * resolution) + (ctx.lineWidth / 2), (y * resolution) + (ctx.lineWidth / 2), 2, 0, math.TAU);
+                    ctx.fillRect(x * resolution, y * resolution, resolution, resolution);
 
-                }
-
-            }
-
-            // draw isolines
-            for (let y = 0; y < rows - 1; y++) {
-
-                for (let x = 0; x < cols - 1; x++) {
-
-                    const j = y * resolution;
-                    const i = x * resolution;
-                    // create all possible line vectors
-                    const a = new math.Vector2(i + resolution * 0.5, j);
-                    const b = new math.Vector2(i + resolution, j + resolution * 0.5);
-                    const c = new math.Vector2(i + resolution * 0.5, j + resolution);
-                    const d = new math.Vector2(i, j + resolution * 0.5);
-
-                    states[getState(Math.floor(fields[y][x] + 0.5), Math.floor(fields[y + 1][x] + 0.5), Math.floor(fields[y + 1][x + 1] + 0.5), Math.floor(fields[y][x + 1] + 0.5))](a, b, c, d);
-                    // draw the lines
-                    ctx.stroke();
+                    fields[x][y] = noise(x, y + xoff);
 
                 }
 
             }
+
+            // ctx.beginPath();
+            // for (let x = 0; x < cols - 1; x++) {
+            //     // draw isolines
+            //     for (let y = 0; y < rows - 1; y++) {
+
+            //         const _x = x * resolution;
+            //         const _y = y * resolution;
+            //         // create all possible line vectors
+            //         const a = new math.Vector2(_x + resolution * 0.5, _y);
+            //         const b = new math.Vector2(_x + resolution, _y + resolution * 0.5);
+            //         const c = new math.Vector2(_x + resolution * 0.5, _y + resolution);
+            //         const d = new math.Vector2(_x, _y + resolution * 0.5);
+
+            //         const state = getState(
+            //             Math.ceil(fields[x][y]),         // a vector
+            //             Math.ceil(fields[x + 1][y]),     // b vector
+            //             Math.ceil(fields[x + 1][y + 1]), // c vector
+            //             Math.ceil(fields[x][y + 1])      // d vector
+            //         );
+
+            //         switch (state) {
+            //             case 1:
+            //                 line(c, d);
+            //                 break;
+            //             case 2:
+            //                 line(b, c);
+            //                 break;
+            //             case 3:
+            //                 line(b, d);
+            //                 break;
+            //             case 4:
+            //                 line(a, b);
+            //                 break;
+            //             case 5:
+            //                 line(a, d);
+            //                 line(b, c);
+            //                 break;
+            //             case 6:
+            //                 line(a, c);
+            //                 break;
+            //             case 7:
+            //                 line(a, d);
+            //                 break;
+            //             case 8:
+            //                 line(a, d);
+            //             case 9:
+            //                 line(a, c);
+            //                 break;
+            //             case 10:
+            //                 line(a, b);
+            //                 line(c, d);
+            //                 break;
+            //             case 11:
+            //                 line(a, b);
+            //                 break;
+            //             case 12:
+            //                 line(b, d);
+            //                 break;
+            //             case 13:
+            //                 line(b, c);
+            //                 break;
+            //             case 14:
+            //                 line(c, d);
+            //                 break;
+            //         }
+
+            //     }
+
+            // }
 
         }
 
