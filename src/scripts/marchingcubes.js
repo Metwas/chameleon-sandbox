@@ -117,7 +117,7 @@ module.exports = function (canvas, ctx, options) {
         "14": function (a, b, c, d) {
             line(c, d);
         },
-        
+
     };
 
     const getState = function (a, b, c, d) {
@@ -223,7 +223,7 @@ module.exports = function (canvas, ctx, options) {
                     const c = new math.Vector2(i + resolution * 0.5, j + resolution);
                     const d = new math.Vector2(i, j + resolution * 0.5);
 
-                    states[getState(Math.floor(fields[y][x]+0.5), Math.floor(fields[y + 1][x]+0.5), Math.floor(fields[y + 1][x + 1]+0.5), Math.floor(fields[y][x + 1]+0.5))](a, b, c, d);
+                    states[getState(Math.floor(fields[y][x] + 0.5), Math.floor(fields[y + 1][x] + 0.5), Math.floor(fields[y + 1][x + 1] + 0.5), Math.floor(fields[y][x + 1] + 0.5))](a, b, c, d);
                     // draw the lines
                     ctx.stroke();
 
