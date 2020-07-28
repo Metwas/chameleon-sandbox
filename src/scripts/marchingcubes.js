@@ -42,7 +42,7 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 5;
+    let resolution = 15;
 
     let fields = [];
     let yoff = 0;
@@ -168,7 +168,7 @@ module.exports = function (canvas, ctx, options) {
                     ctx.lineWidth = resolution;
                     ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%,50%, 1)";
                     // ctx.arc((x * resolution) + (ctx.lineWidth / 2), (y * resolution) + (ctx.lineWidth / 2), 2, 0, math.TAU);
-                    ctx.fillRect(x * resolution, y * resolution, resolution, resolution);
+                    ctx.fillRect(x * resolution, y * resolution, resolution / 5, resolution / 5);
 
                     fields[x][y] = noise(x, y + xoff);
 
@@ -176,75 +176,75 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            // ctx.beginPath();
-            // for (let x = 0; x < cols - 1; x++) {
-            //     // draw isolines
-            //     for (let y = 0; y < rows - 1; y++) {
+            ctx.beginPath();
+            for (let x = 0; x < cols - 1; x++) {
+                // draw isolines
+                for (let y = 0; y < rows - 1; y++) {
 
-            //         const _x = x * resolution;
-            //         const _y = y * resolution;
-            //         // create all possible line vectors
-            //         const a = new math.Vector2(_x + resolution * 0.5, _y);
-            //         const b = new math.Vector2(_x + resolution, _y + resolution * 0.5);
-            //         const c = new math.Vector2(_x + resolution * 0.5, _y + resolution);
-            //         const d = new math.Vector2(_x, _y + resolution * 0.5);
+                    const _x = x * resolution;
+                    const _y = y * resolution;
+                    // create all possible line vectors
+                    const a = new math.Vector2(_x + resolution * 0.5, _y);
+                    const b = new math.Vector2(_x + resolution, _y + resolution * 0.5);
+                    const c = new math.Vector2(_x + resolution * 0.5, _y + resolution);
+                    const d = new math.Vector2(_x, _y + resolution * 0.5);
 
-            //         const state = getState(
-            //             Math.ceil(fields[x][y]),         // a vector
-            //             Math.ceil(fields[x + 1][y]),     // b vector
-            //             Math.ceil(fields[x + 1][y + 1]), // c vector
-            //             Math.ceil(fields[x][y + 1])      // d vector
-            //         );
+                    const state = getState(
+                        Math.ceil(fields[x][y]),         // a vector
+                        Math.ceil(fields[x + 1][y]),     // b vector
+                        Math.ceil(fields[x + 1][y + 1]), // c vector
+                        Math.ceil(fields[x][y + 1])      // d vector
+                    );
 
-            //         switch (state) {
-            //             case 1:
-            //                 line(c, d);
-            //                 break;
-            //             case 2:
-            //                 line(b, c);
-            //                 break;
-            //             case 3:
-            //                 line(b, d);
-            //                 break;
-            //             case 4:
-            //                 line(a, b);
-            //                 break;
-            //             case 5:
-            //                 line(a, d);
-            //                 line(b, c);
-            //                 break;
-            //             case 6:
-            //                 line(a, c);
-            //                 break;
-            //             case 7:
-            //                 line(a, d);
-            //                 break;
-            //             case 8:
-            //                 line(a, d);
-            //             case 9:
-            //                 line(a, c);
-            //                 break;
-            //             case 10:
-            //                 line(a, b);
-            //                 line(c, d);
-            //                 break;
-            //             case 11:
-            //                 line(a, b);
-            //                 break;
-            //             case 12:
-            //                 line(b, d);
-            //                 break;
-            //             case 13:
-            //                 line(b, c);
-            //                 break;
-            //             case 14:
-            //                 line(c, d);
-            //                 break;
-            //         }
+                    switch (state) {
+                        case 1:
+                            line(c, d);
+                            break;
+                        case 2:
+                            line(b, c);
+                            break;
+                        case 3:
+                            line(b, d);
+                            break;
+                        case 4:
+                            line(a, b);
+                            break;
+                        case 5:
+                            line(a, d);
+                            line(b, c);
+                            break;
+                        case 6:
+                            line(a, c);
+                            break;
+                        case 7:
+                            line(a, d);
+                            break;
+                        case 8:
+                            line(a, d);
+                        case 9:
+                            line(a, c);
+                            break;
+                        case 10:
+                            line(a, b);
+                            line(c, d);
+                            break;
+                        case 11:
+                            line(a, b);
+                            break;
+                        case 12:
+                            line(b, d);
+                            break;
+                        case 13:
+                            line(b, c);
+                            break;
+                        case 14:
+                            line(c, d);
+                            break;
+                    }
 
-            //     }
+                }
 
-            // }
+            }
 
         }
 
