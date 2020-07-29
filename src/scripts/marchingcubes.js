@@ -42,7 +42,7 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 15;
+    let resolution = canvas.width * 0.1;
 
     let fields = [];
     let yoff = 0;
@@ -60,20 +60,21 @@ module.exports = function (canvas, ctx, options) {
     /**
      * Line helper for the marching cubes
      * 
-     * @param {math.Vector2} x0 
      * @param {math.Vector2} x1 
+     * @param {math.Vector2} x2 
      */
-    let line = function (x0, x1, color, weight) {
+    let line = function (x1, x2, color, weight) {
 
         if ((hue += (resolution * 0.0001)) > 360) {
             hue = resolution;
         }
 
         this.lineWidth = 1;
-        this.strokeStyle = "hsla(" + hue + ",50%,50%, 1)"; 
+        this.strokeStyle = "hsla(" + hue + ",50%,50%, 1)";
 
+        this.beginPath();
         this.moveTo(x1.x, x1.y);
-        this.lineTo(x0.x, x0.y);
+        this.lineTo(x2.x, x2.y);
         this.stroke();
 
     };
@@ -154,29 +155,30 @@ module.exports = function (canvas, ctx, options) {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, width, height);
 
-            xoff += 0.0001;
-            
+            let yoff = 0;
             // draw grid
             for (let x = 0; x < cols; x++) {
 
-                angle+=(0.0003 * x);
+                xoff += 0.001;
+             
                 for (let y = 0; y < cols; y++) {
 
-                    // get field value (0 OR 1)
-                    const value = fields[x][y] * 255;
+                    yoff += 0.1;
+                    fields[x][y] = parseFloat(noise(xoff, yoff));
+                    
+                    let color = fields[x][y] * 255;
 
                     ctx.lineWidth = resolution;
-                    ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%,50%, 1)";
-                    // ctx.arc((x * resolution) + (ctx.lineWidth / 2), (y * resolution) + (ctx.lineWidth / 2), 2, 0, math.TAU);
-                    ctx.fillRect(x * resolution, y * resolution, resolution / 5, resolution / 5);
+                    ctx.fillStyle = "rgb(" + color + "," + color + "," + color + ")";
 
-                    fields[x][y] = noise(x, y + xoff);
+                    ctx.beginPath();
+                    ctx.arc(x * resolution, y * resolution, ctx.lineWidth / 4, 0, math.TAU, false);
+                    ctx.fill();
 
                 }
 
             }
 
-            ctx.beginPath();
             for (let x = 0; x < cols - 1; x++) {
                 // draw isolines
                 for (let y = 0; y < rows - 1; y++) {
@@ -221,6 +223,7 @@ module.exports = function (canvas, ctx, options) {
                             break;
                         case 8:
                             line(a, d);
+                            break;
                         case 9:
                             line(a, c);
                             break;
