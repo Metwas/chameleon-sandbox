@@ -155,15 +155,14 @@ module.exports = function (canvas, ctx, options) {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, width, height);
 
-            let yoff = 0;
+            xoff = 0;
+            
             // draw grid
             for (let x = 0; x < cols; x++) {
-
-                xoff += 0.001;
              
                 for (let y = 0; y < cols; y++) {
 
-                    yoff += 0.1;
+                    xoff += 0.001;
                     fields[x][y] = parseFloat(noise(xoff, yoff));
                     
                     let color = fields[x][y] * 255;
@@ -172,7 +171,7 @@ module.exports = function (canvas, ctx, options) {
                     ctx.fillStyle = "rgb(" + color + "," + color + "," + color + ")";
 
                     ctx.beginPath();
-                    ctx.arc(x * resolution, y * resolution, ctx.lineWidth / 4, 0, math.TAU, false);
+                    ctx.arc(x * resolution, y * resolution, ctx.lineWidth / 8, 0, math.TAU, false);
                     ctx.fill();
 
                 }
