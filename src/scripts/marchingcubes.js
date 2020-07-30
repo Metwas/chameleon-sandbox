@@ -42,11 +42,12 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = canvas.width * 0.1;
+    let resolution = 15;
 
     let fields = [];
     let yoff = 0;
     let xoff = 0;
+    let zoff =  0;
     let angle = 0;
 
     let hue = 0;
@@ -55,7 +56,7 @@ module.exports = function (canvas, ctx, options) {
     let noise = null;
     let simplex_octave = null;
     // octave noise detail
-    let noiseDetail = 8;
+    let noiseDetail = 24;
 
     /**
      * Line helper for the marching cubes
@@ -106,14 +107,14 @@ module.exports = function (canvas, ctx, options) {
 
             simplex_octave = math.createNoise();
             // create simplex noise 
-            noise = function (x, y) {
+            noise = function (x, y, z) {
 
                 // get 1st octave noise
-                let n = simplex_octave.noise(x, y);
+                let n = simplex_octave.noise(x, y, z);
                 let factor = 1;
 
                 for (let i = 2; i <= noiseDetail; i = (i * 2)) {
-                    n += (factor = (factor / 2)) * simplex_octave.noise(x * i, y * i);
+                    n += (factor = (factor / 2)) * simplex_octave.noise(x * i, y * i, z * i);
                 }
 
                 return n;
@@ -154,16 +155,16 @@ module.exports = function (canvas, ctx, options) {
 
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, width, height);
-
-            xoff = 0;
             
+            xoff = 0;
             // draw grid
             for (let x = 0; x < cols; x++) {
              
+                xoff += 0.1;
+                yoff = 0;
                 for (let y = 0; y < cols; y++) {
 
-                    xoff += 0.001;
-                    fields[x][y] = parseFloat(noise(xoff, yoff));
+                    fields[x][y] = parseFloat(noise(xoff, yoff, zoff));
                     
                     let color = fields[x][y] * 255;
 
@@ -171,12 +172,16 @@ module.exports = function (canvas, ctx, options) {
                     ctx.fillStyle = "rgb(" + color + "," + color + "," + color + ")";
 
                     ctx.beginPath();
-                    ctx.arc(x * resolution, y * resolution, ctx.lineWidth / 8, 0, math.TAU, false);
+                    ctx.arc(x * resolution, y * resolution, ctx.lineWidth / 2, 0, math.TAU, false);
                     ctx.fill();
+
+                    yoff += 0.1;
 
                 }
 
             }
+
+            zoff += 0.006;
 
             for (let x = 0; x < cols - 1; x++) {
                 // draw isolines
