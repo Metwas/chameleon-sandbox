@@ -206,7 +206,7 @@ module.exports = function (canvas, ctx, options) {
                             line(c, d);
                             break;
                         case 2:
-                            line(b, c, null, 0.6);
+                            line(b, c, null, 0.8);
                             break;
                         case 3:
                             line(b, d);
@@ -219,19 +219,19 @@ module.exports = function (canvas, ctx, options) {
                             line(b, c);
                             break;
                         case 6:
-                            line(a, c, null, 0.2);
+                            line(a, c, null, 0.8);
                             break;
                         case 7:
                             line(a, d, null, 0.7);
                             break;
                         case 8:
-                            line(a, d, null ,0.5);
+                            line(a, d, null ,0.8);
                             break;
                         case 9:
-                            line(a, c, null, 0.4);
+                            line(a, c, null, 0.8);
                             break;
                         case 10:
-                            line(a, b, null, 0.5);
+                            line(a, b, null, 0.8);
                             line(c, d);
                             break;
                         case 11:
@@ -244,7 +244,7 @@ module.exports = function (canvas, ctx, options) {
                             line(b, c, null, 0.5);
                             break;
                         case 14:
-                            line(c, d, null, 0.5);
+                            line(c, d, null, 0.8);
                             break;
                     }
 
