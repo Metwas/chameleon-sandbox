@@ -27,7 +27,7 @@ const { utils, math } = require("broadleaf");
 //======================== End Imports ========================//
 
 /**
- * Simplex noise demo
+ * Noise blocks with configurable resolutions
  * 
  * @author Metwas
  * 
@@ -39,56 +39,23 @@ module.exports = function (canvas, ctx, options) {
 
     let height = 0;
     let width = 0;
-    // simplex noise reference
-    let simplex = null;
 
-    let xoff = 0;
+    let rows = 0;
+    let cols = 0;
+    let resolution = 0.03;
+
+    let fields = [];
     let yoff = 0;
-    let pos = 0;
-    // noise increment
-    let inc = 0.01;
+    let xoff = 0;
+    let zoff = 0;
+    let angle = 0;
 
-    /**
-     * Vector argument validator
-     * 
-     * @param {Any} arg 
-     * @param {Number} length 
-     */
-    const isValidVecArgs = function (arg, length) {
-        return utils.isInstanceOf(arg, math.Vector2) && arguments.length >= length;
-    };
+    let hue = 0;
 
-    /**
-     * Catesian coordinate to index helper function
-     * 
-     * @param {Number} x 
-     * @param {Number} y 
-     * @param {Array} array 
-     * @returns {Any}
-     */
-    const getIndexedValue = function (x, y, width, array, rgb) {
+    // simplex noise
+    let noise = null;
 
-        const index = (y * width + x);
-
-        // handle the one-dimensional spread accross the rgb space    e.g  Pixel 1: (255, 255, 255) Pixel 2 (0, 0, 0)
-        if (rgb === true) {
-
-            // return as 'pixel object'
-            return {
-                red: array[index],
-                green: array[index + 1],
-                blue: array[index + 2]
-            };
-
-        }
-
-        return array[index];
-
-    };
-
-    /**
-     * Return chameleon sketch template
-     */
+    /** Return chameleon sketch template */
     return {
 
         /**
@@ -104,6 +71,15 @@ module.exports = function (canvas, ctx, options) {
 
             width = canvas.width;
             height = canvas.height;
+            resolution = (width > height ? width : height) * resolution;
+
+            // scale rows and cols to set resolution
+            rows = Math.round(1 + height / resolution);
+            cols = Math.round(1 + width / resolution);
+
+            noise = math.simplex.createNoise();
+            // set noise detail to 8 octaves
+            math.simplex.noiseDetail(8);
 
             // add canvas mouse-move event listener
             canvas.onmousemove = function (event) {
@@ -111,8 +87,17 @@ module.exports = function (canvas, ctx, options) {
                 mouseY = event.offsetY || event.layerY;
             };
 
-            // initialize simplex noise
-            simplex = math.createNoise(255);
+            // create a multidimensional array
+            for (let x = 0; x < cols; x++) {
+
+                const k = [];
+                for (let y = 0; y < rows; y++) {
+                    k.push(0);
+                }
+
+                fields.push(k);
+
+            }
 
         },
 
@@ -126,49 +111,32 @@ module.exports = function (canvas, ctx, options) {
         loop: function (canvas, ctx, options) {
 
             ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, width, height);
 
-            // get current image data from the canvas
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const data = imageData.data;
+            xoff = 0;
+            // draw grid
+            for (let x = 0; x < cols; x++) {
 
-            pos += 0.0013;
-            yoff = pos;
-            // map out buffers into pixel array for the canvas to load
-            for (let y = 0; y < height; y++) {
+                angle += (0.0003 * x);
+                xoff += 0.1;
+                yoff = 0;
+                for (let y = 0; y < cols; y++) {
 
-                yoff += inc;
-                xoff = 0;
-                for (let x = 0; x < width; x++) {
+                    fields[x][y] = parseFloat(noise(xoff, yoff, zoff));
 
-                    xoff += inc;
+                    ctx.lineWidth = resolution;
+                    ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 100 + "%, 1)";
 
-                    // create noise of various frequencies (octaves)
-                    const n = simplex.noise(pos * 4, yoff);
-                    const n2 = 0.5 * simplex.noise(2 * xoff, 2 * yoff);
-                    const n3 = 0.25 * simplex.noise(4 * xoff, 4 * yoff);
-                    const n4 = 0.125 * simplex.noise(8 * xoff, 8 * yoff);
-                    const n5 = 0.0625 * simplex.noise(16 * xoff, 16 * yoff);
-                    const n6 = 0.03125 * simplex.noise(32 * xoff, 32 * yoff);
-                    const n7 = 0.015625 * simplex.noise(64 * xoff, 64 * yoff);
+                    ctx.beginPath();
+                    ctx.fillRect((x * resolution), (y * resolution), resolution, resolution);
 
-                    // map noise values from -1,1 to brightness 0-255
-                    const brightness = math.map((n + n2 + n3 + n4 + n5), -1, 1, 0, 50);
-
-                    // get current index as one-dimensional
-                    const index = (y * width + x) * 4;
-                    // add to image buffer
-                    data[index] = brightness;
-                    data[index + 1] = brightness;
-                    data[index + 2] = brightness;
-                    data[index + 3] = 255;
+                    yoff += 0.1;
 
                 }
 
             }
 
-            // update canvas with new modified image data
-            ctx.putImageData(imageData, 0, 0);
+            zoff += 0.003;
 
         }
 

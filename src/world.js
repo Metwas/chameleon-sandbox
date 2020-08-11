@@ -33,6 +33,8 @@ const ripple = require("./scripts/ripple");
 const isosurface = require("./scripts/isosurface");
 // import marching cubes
 const marchingCubes = require("./scripts/marchingcubes");
+// import game of life
+const gameoflife = require("./scripts/gameoflife");
 // import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
@@ -40,7 +42,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = marchingCubes;
+let script = noise;
 
 /**
  * Global context options
