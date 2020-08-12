@@ -47,16 +47,13 @@ module.exports = function (canvas, ctx, options) {
     let fields = [];
     let yoff = 0;
     let xoff = 0;
-    let zoff =  0;
+    let zoff = 0;
     let angle = 0;
 
     let hue = 0;
 
     // simplex noise
     let noise = null;
-    let simplex_octave = null;
-    // octave noise detail
-    let noiseDetail = 8;
 
     /**
      * Line helper for the marching cubes
@@ -93,31 +90,17 @@ module.exports = function (canvas, ctx, options) {
          */
         setup: function (canvas, ctx, options) {
 
-            console.log("Setup initialized");
-
             width = canvas.width;
             height = canvas.height;
-            resolution = (width > height ? width : height) * resolution; 
 
+            resolution = (width > height ? width : height) * resolution;
             // scale rows and cols to set resolution
-            rows = Math.round(1 + height / resolution);
-            cols = Math.round(1 + width / resolution);
+            rows = (height / resolution) + 1;
+            cols = (width / resolution) + 1;
 
-            simplex_octave = math.createNoise();
-            // create simplex noise 
-            noise = function (x, y, z) {
-
-                // get 1st octave noise
-                let n = simplex_octave.noise(x, y, z);
-                let factor = 1;
-
-                for (let i = 2; i <= noiseDetail; i = (i * 2)) {
-                    n += (factor = (factor / 2)) * simplex_octave.noise(x * i, y * i, z * i);
-                }
-
-                return n;
-
-            };
+            noise = math.simplex.createNoise();
+            // set noise detail to 8 octaves
+            math.simplex.noiseDetail(8);
 
             // bind line to context
             line = line.bind(ctx);
@@ -153,23 +136,23 @@ module.exports = function (canvas, ctx, options) {
 
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, width, height);
-            
+
             xoff = 0;
             // draw grid
             for (let x = 0; x < cols; x++) {
-             
-                angle+=(0.0003 * x);
+
+                angle += (0.0003 * x);
                 xoff += 0.1;
                 yoff = 0;
-                for (let y = 0; y < cols; y++) {
+                for (let y = 0; y < rows; y++) {
 
                     fields[x][y] = parseFloat(noise(xoff, yoff, zoff));
 
-                    ctx.lineWidth = resolution;
-                    ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 100 + "%, 1)";
+                    ctx.lineWidth = resolution * 2;
+                    ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 200 + "%, 1)";
 
                     ctx.beginPath();
-                    ctx.arc((x * resolution), (y * resolution), Math.abs((fields[x][y] * resolution)), 0, math.TAU, false);
+                    ctx.arc((x * resolution), (y * resolution), Math.abs((fields[x][y] * (resolution * 1.3))), 0, math.TAU, false);
                     ctx.fill();
 
                     yoff += 0.1;
@@ -178,7 +161,7 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            zoff += 0.003;
+            zoff += 0.001;
 
             for (let x = 0; x < cols - 1; x++) {
                 // draw isolines
@@ -206,45 +189,45 @@ module.exports = function (canvas, ctx, options) {
                             line(c, d);
                             break;
                         case 2:
-                            line(b, c, null, 0.8);
+                            line(b, c, null, 5);
                             break;
                         case 3:
                             line(b, d);
                             break;
                         case 4:
-                            line(a, b, null, 0.5);
+                            line(a, b, null, 5);
                             break;
                         case 5:
                             line(a, d);
                             line(b, c);
                             break;
                         case 6:
-                            line(a, c, null, 0.8);
+                            line(a, c, null, 5);
                             break;
                         case 7:
-                            line(a, d, null, 0.7);
+                            line(a, d, null, 2);
                             break;
                         case 8:
-                            line(a, d, null ,0.8);
+                            line(a, d, null, 1);
                             break;
                         case 9:
-                            line(a, c, null, 0.8);
+                            line(a, c, null, 2.8);
                             break;
                         case 10:
-                            line(a, b, null, 0.8);
+                            line(a, b, null, 1.4);
                             line(c, d);
                             break;
                         case 11:
-                            line(a, b);
+                            line(a, b, 4);
                             break;
                         case 12:
-                            line(b, d, null, 0.7);
+                            line(b, d, null, 2.7);
                             break;
                         case 13:
-                            line(b, c, null, 0.5);
+                            line(b, c, null, 2.5);
                             break;
                         case 14:
-                            line(c, d, null, 0.8);
+                            line(c, d, null, 1.8);
                             break;
                     }
 

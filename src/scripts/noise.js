@@ -42,7 +42,10 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 0.03;
+    let resolution = 45;
+
+    let c_height = 0;
+    let c_width = 0;
 
     let fields = [];
     let yoff = 0;
@@ -67,15 +70,21 @@ module.exports = function (canvas, ctx, options) {
          */
         setup: function (canvas, ctx, options) {
 
-            console.log("Setup initialized");
-
             width = canvas.width;
             height = canvas.height;
-            resolution = (width > height ? width : height) * resolution;
 
-            // scale rows and cols to set resolution
-            rows = Math.round(1 + height / resolution);
-            cols = Math.round(1 + width / resolution);
+            if (width > height) {
+                // scale rows and cols to set resolution
+                rows = (height / resolution);
+                cols = (width / resolution);
+            } else {
+                // scale rows and cols to set resolution
+                rows = (width / resolution);
+                cols = (height / resolution);
+            }
+
+            c_height = resolution;
+            c_width = resolution;
 
             noise = math.simplex.createNoise();
             // set noise detail to 8 octaves
@@ -128,7 +137,7 @@ module.exports = function (canvas, ctx, options) {
                     ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 100 + "%, 1)";
 
                     ctx.beginPath();
-                    ctx.fillRect((x * resolution), (y * resolution), resolution, resolution);
+                    ctx.fillRect((x * resolution), (y * resolution), c_width, c_height);
 
                     yoff += 0.1;
 
