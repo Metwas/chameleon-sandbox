@@ -129,7 +129,7 @@ module.exports = function (canvas, ctx, options) {
                 angle += (0.0003 * x);
                 xoff += 0.1;
                 yoff = 0;
-                for (let y = 0; y < cols; y++) {
+                for (let y = 0; y < rows; y++) {
 
                     fields[x][y] = parseFloat(noise(xoff, yoff, zoff));
 
