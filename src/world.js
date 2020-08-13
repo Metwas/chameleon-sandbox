@@ -42,7 +42,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = noise;
+let script = gameoflife;
 
 /**
  * Global context options
