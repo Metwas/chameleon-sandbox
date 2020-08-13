@@ -42,7 +42,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = marchingCubes;
+let script = noise;
 
 /**
  * Global context options

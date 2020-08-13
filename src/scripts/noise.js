@@ -136,7 +136,6 @@ module.exports = function (canvas, ctx, options) {
                     ctx.lineWidth = resolution;
                     ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 100 + "%, 1)";
 
-                    ctx.beginPath();
                     ctx.fillRect((x * resolution), (y * resolution), c_width, c_height);
 
                     yoff += 0.1;
