@@ -42,13 +42,13 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 20;
+    let resolution = 25;
 
     let c_height = 0;
     let c_width = 0;
-
+    let angle = 0;
     let fields = [];
-    let hue = 0;
+    let hue = 350;
 
     // 2d array helper
     const make2DArray = function (cols, rows) {
@@ -105,6 +105,9 @@ module.exports = function (canvas, ctx, options) {
             width = canvas.width;
             height = canvas.height;
 
+            // 1 percent of the largest area
+            resolution = (width > height ? width : height) * 0.01;
+
             rows = Math.round(height / resolution);
             cols = Math.round(width / resolution);
 
@@ -137,8 +140,6 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            hue = math.random(0, 360, true);
-
             const sample = function(delay){
                 
                 fields[math.random(1, cols - 1, true)][math.random(1, rows - 1, true)] = 1;
@@ -167,11 +168,12 @@ module.exports = function (canvas, ctx, options) {
             // draw grid
             for (let x = 0; x < cols; x++) {
 
+                angle += 0.05;
                 for (let y = 0; y < rows; y++) {
 
                     if (fields[x][y] === 1) {
 
-                        ctx.fillStyle = "hsla(" + hue + ",50%, 50%, 1)";
+                        ctx.fillStyle = "hsla(" + ((hue * x + angle) % 360) + ",50%, 50%, 1)";
                         ctx.fillRect((x * resolution) - 0.5, (y * resolution) - 0.5, c_width - 0.5, c_height - 0.5);
 
                     }
