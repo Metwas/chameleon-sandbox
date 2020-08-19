@@ -8,8 +8,10 @@
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
+     
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -106,7 +108,7 @@ module.exports = function (canvas, ctx, options) {
             height = canvas.height;
 
             // 1 percent of the largest area
-            resolution = (width > height ? width : height) * 0.01;
+            resolution = 3;
 
             rows = Math.round(height / resolution);
             cols = Math.round(width / resolution);
@@ -140,16 +142,26 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            const sample = function(delay){
-                
-                fields[math.random(1, cols - 1, true)][math.random(1, rows - 1, true)] = 1;
+            const sample = function (delay) {
+
+                let x_start = math.random(0, cols / 2, true);
+                let y_start = math.random(0, rows / 2, true);
+
+                for (let x = x_start; x < cols; x++) {
+
+                    for (let y = y_start; y < rows; y++) {
+                        fields[x][y] = 1;
+                    }
+
+                }
+
                 // re-initialize timer
                 setTimeout(sample, delay, delay);
 
             };
 
             // random fill timeout
-            setTimeout(sample, 1000, 1000);
+            setTimeout(sample, 5000, 5000);
 
         },
 
@@ -162,13 +174,13 @@ module.exports = function (canvas, ctx, options) {
          */
         loop: function (canvas, ctx, options) {
 
-            ctx.fillStyle = "rgba(0,0,0, 0.4)";
+            ctx.fillStyle = "rgba(0,0,0, 1)";
             ctx.fillRect(0, 0, width, height);
 
             // draw grid
             for (let x = 0; x < cols; x++) {
 
-                angle += 0.05;
+                angle += 0.009;
                 for (let y = 0; y < rows; y++) {
 
                     if (fields[x][y] === 1) {
