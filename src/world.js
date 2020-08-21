@@ -8,8 +8,10 @@
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
+     
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
+
      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,10 +33,12 @@ const noise = require("./scripts/noise");
 const ripple = require("./scripts/ripple");
 // import isoSurface script
 const isosurface = require("./scripts/isosurface");
-// import marching cubes
-const marchingCubes = require("./scripts/marchingcubes");
 // import game of life
 const gameoflife = require("./scripts/gameoflife");
+// import game of life
+const noiseField = require("./scripts/noiseField");
+// import marching cubes
+const marchingCubes = require("./scripts/marchingcubes");
 // import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
@@ -42,7 +46,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = gameoflife;
+let script = noiseField;
 
 /**
  * Global context options

@@ -44,7 +44,7 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 45;
+    let resolution = 15;
 
     let c_height = 0;
     let c_width = 0;
@@ -75,22 +75,16 @@ module.exports = function (canvas, ctx, options) {
             width = canvas.width;
             height = canvas.height;
 
-            if (width > height) {
-                // scale rows and cols to set resolution
-                rows = (height / resolution);
-                cols = (width / resolution);
-            } else {
-                // scale rows and cols to set resolution
-                rows = (width / resolution);
-                cols = (height / resolution);
-            }
+          // scale rows and cols to set resolution
+          rows = (height / resolution);
+          cols = (width / resolution);
 
             c_height = resolution;
             c_width = resolution;
 
             noise = math.simplex.createNoise();
             // set noise detail to 8 octaves
-            math.simplex.noiseDetail(8);
+            math.simplex.noiseDetail(64);
 
             // add canvas mouse-move event listener
             canvas.onmousemove = function (event) {
@@ -129,24 +123,26 @@ module.exports = function (canvas, ctx, options) {
             for (let x = 0; x < cols; x++) {
 
                 angle += (0.0003 * x);
-                xoff += 0.1;
-                yoff = 0;
+                
                 for (let y = 0; y < rows; y++) {
 
-                    fields[x][y] = parseFloat(noise(xoff, yoff, zoff));
+                    fields[x][y] = noise(xoff, yoff, zoff);
 
                     ctx.lineWidth = resolution;
                     ctx.fillStyle = "hsla(" + (angle + x) * 3 + ",50%," + fields[x][y] * 100 + "%, 1)";
 
                     ctx.fillRect((x * resolution), (y * resolution), c_width, c_height);
 
-                    yoff += 0.1;
+                    yoff += 0.04;
 
                 }
 
+                xoff += 0.04;
+                yoff = 0;
+
             }
 
-            zoff += 0.003;
+            zoff += 0.03;
 
         }
 

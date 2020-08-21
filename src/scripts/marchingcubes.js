@@ -44,7 +44,7 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 0.05;
+    let resolution = 0.02;
 
     let fields = [];
     let yoff = 0;
@@ -66,7 +66,7 @@ module.exports = function (canvas, ctx, options) {
     let line = function (x1, x2, color, weight) {
 
         this.lineWidth = weight || 1;
-        this.strokeStyle = "hsla(" + hue + ",50%,50%, 1)";
+        this.strokeStyle = "white";
 
         this.beginPath();
         this.lineCap = 'round';
@@ -163,7 +163,7 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            zoff += 0.001;
+            zoff += 0.03;
 
             for (let x = 0; x < cols - 1; x++) {
                 // draw isolines
