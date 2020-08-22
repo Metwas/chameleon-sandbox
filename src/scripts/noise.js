@@ -84,7 +84,7 @@ module.exports = function (canvas, ctx, options) {
 
             noise = math.simplex.createNoise();
             // set noise detail to 8 octaves
-            math.simplex.noiseDetail(64);
+            math.simplex.noiseDetail(8);
 
             // add canvas mouse-move event listener
             canvas.onmousemove = function (event) {

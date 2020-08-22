@@ -104,7 +104,7 @@ module.exports = function (canvas, ctx, options) {
 
             noise = math.simplex.createNoise();
             // set noise detail to 8 octaves
-            math.simplex.noiseDetail(4);
+            math.simplex.noiseDetail(8);
 
             // bind line to context
             line = line.bind(ctx);
@@ -145,7 +145,7 @@ module.exports = function (canvas, ctx, options) {
                     ctx.save();
                     ctx.translate(x * resolution, y * resolution);
                     ctx.rotate(vector.heading());
-                    line({ x: 0, y: 0 }, { x: resolution * 1.2, y: resolution * 1.2 }, "hsla(" + (angle + x) * 3 + ",50%, " + Math.abs(n * 50) + 100 + "%, 1)", resolution * 0.4);
+                    line({ x: 0, y: 0 }, { x: resolution * 1.2, y: resolution * 1.2 }, "hsla(" + (angle + x) * 3 + ",50%, " + Math.abs(n * 50) + 100 + "%, 1)", resolution * 0.1);
                     ctx.restore();
 
                     yoff += 0.01;
