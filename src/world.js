@@ -29,6 +29,8 @@ const { utils } = require("broadleaf");
 const boid = require("./scripts/boids");
 // import noise script
 const noise = require("./scripts/noise");
+// import 2d cloud simulation
+const cloud = require("./scripts/2Dcloud");
 // import ripple script
 const ripple = require("./scripts/ripple");
 // import isoSurface script
@@ -46,7 +48,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = noiseField;
+let script = cloud;
 
 /**
  * Global context options
