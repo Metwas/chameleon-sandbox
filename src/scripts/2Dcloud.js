@@ -56,6 +56,8 @@ module.exports = function (canvas, ctx, options) {
     let angle = 0;
     let move = 0;
     let hue = 0;
+    let inc = 0.015;
+    let speed = 0.005;
 
     // simplex noise
     let noise = null;
@@ -115,10 +117,10 @@ module.exports = function (canvas, ctx, options) {
          */
         loop: function (canvas, ctx, options) {
 
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "steelblue";
             ctx.fillRect(0, 0, width, height);
 
-            move += 0.01;
+            move += speed;
             xoff = move;
             // draw grid
             for (let x = 0; x < cols; x++) {
@@ -129,16 +131,17 @@ module.exports = function (canvas, ctx, options) {
 
                     fields[x][y] = noise(xoff, yoff, zoff);
 
+                    const blue = (fields[x][y] * 255) + 350;
                     ctx.lineWidth = resolution;
-                    ctx.fillStyle = "rgb(" + fields[x][y] * 255 + "," + fields[x][y] * 255 + ", " + fields[x][y] * 255 + ")";
+                    ctx.fillStyle = "rgb(" + fields[x][y] * 255 + "," + fields[x][y] * 255 + ", " + blue + ")";
 
                     ctx.fillRect((x * resolution), (y * resolution), c_width, c_height);
 
-                    yoff += 0.02;
+                    yoff += inc;
 
                 }
 
-                xoff += 0.02;
+                xoff += inc;
                 yoff = 0;
 
             }
