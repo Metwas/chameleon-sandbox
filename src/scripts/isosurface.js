@@ -57,9 +57,6 @@ module.exports = function (canvas, ctx, options) {
 
     // simplex noise
     let noise = null;
-    let simplex_octave = null;
-    // octave noise detail
-    let noiseDetail = 8;
 
     /** Return chameleon sketch template */
     return {
@@ -78,21 +75,8 @@ module.exports = function (canvas, ctx, options) {
             width = canvas.width;
             height = canvas.height;
 
-            simplex_octave = math.createNoise();
-            // create simplex noise 
-            noise = function (x, y) {
-
-                // get 1st octave noise
-                let n = simplex_octave.noise(x, y);
-                let factor = 1;
-
-                for (let i = 2; i <= noiseDetail; i = (i * 2)) {
-                    n += (factor = (factor / 2)) * simplex_octave.noise(x * i, y * i);
-                }
-
-                return n;
-
-            };
+            noise = math.simplex.createNoise();
+            math.simplex.noiseDetail(8);
 
             // empty boids container
             blobs = [];
