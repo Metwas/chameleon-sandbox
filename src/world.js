@@ -25,30 +25,32 @@
 
 // import utilities
 const { utils } = require("broadleaf");
+// import smoke (turbulence) simulation
+const smoke = require("./scripts/smoke");
 // import boid script
-const boid = require("./scripts/boids");
-// import noise script
-const noise = require("./scripts/noise");
-// import 2d cloud simulation
-const cloud = require("./scripts/2Dcloud");
-// import ripple script
-const ripple = require("./scripts/ripple");
-// import isoSurface script
-const isosurface = require("./scripts/isosurface");
-// import game of life
-const gameoflife = require("./scripts/gameoflife");
-// import game of life
-const noiseField = require("./scripts/noiseField");
-// import marching cubes
-const marchingCubes = require("./scripts/marchingcubes");
-// import sierspinski carpet
-const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
+// const boid = require("./scripts/boids");
+// // import noise script
+// const noise = require("./scripts/noise");
+// // import 2d cloud simulation
+// const cloud = require("./scripts/2Dcloud");
+// // import ripple script
+// const ripple = require("./scripts/ripple");
+// // import isoSurface script
+// const isosurface = require("./scripts/isosurface");
+// // import game of life
+// const gameoflife = require("./scripts/gameoflife");
+// // import game of life
+// const noiseField = require("./scripts/noiseField");
+// // import marching cubes
+// const marchingCubes = require("./scripts/marchingcubes");
+// // import sierspinski carpet
+// const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 //======================== End Imports ========================//
 
 let canvas, ctx = {};
 // load desired script 
-let script = cloud;
+let script = smoke;
 
 /**
  * Global context options
@@ -63,6 +65,20 @@ let options = {
      * @type {Boolean}
      */
     suppressResize: false,
+
+    /**
+     * Automatically gets the context for the script
+     * 
+     * @type {Boolean}
+     */
+    autoGetContext: true,
+
+    /**
+     * Default rendering context name (2D)
+     * 
+     * @type {String}
+     */
+    contextType: "2d"
 
 };
 
@@ -86,8 +102,6 @@ window.onload = function () {
 
     // append to body
     document.body.appendChild(canvas);
-    // get context
-    ctx = canvas.getContext("2d");
 
     // attempt to run at 120 fps
     let fps = 0;
@@ -95,7 +109,13 @@ window.onload = function () {
     let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
     // Override options from setup, keeping defaults if undefined
-    utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, ctx, options)));
+    utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options)));
+
+    if (options.autoGetContext === true) {
+        // get context
+        ctx = canvas.getContext(options.contextName || "2d");
+    }
+
     // ensure script has a defined loop
     !utils.isFunction(target.loop) && (script.loop = utils.noop);
 
@@ -125,7 +145,7 @@ const M_FRAME = function (loop, fps, canvas, ctx, options) {
     };
 
     // timer based frame rendering method
-    const M_TIMER_FRAME = function(){
+    const M_TIMER_FRAME = function () {
 
         _loop.call(null, _canvas, _ctx, _options);
         // render another frame within a set timeout
