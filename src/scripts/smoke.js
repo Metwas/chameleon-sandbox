@@ -25,6 +25,8 @@
 
 // import utilities
 const { utils, math } = require("broadleaf");
+// import particle system object
+const particle = require("../models/particle");
 
 //======================== End Imports ========================//
 
@@ -355,80 +357,83 @@ module.exports = function (canvas, ctx, options) {
 
             blit = blit();
 
-            canvas.addEventListener('mousemove', function (e) {
+            // canvas.addEventListener('mousemove', function (e) {
 
-                count++;
+            //     count++;
 
-                (count > 125) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
+            //     (count > 125) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
 
-                pointers[0].down = true;
-                pointers[0].color = colorArr;
-                pointers[0].moved = pointers[0].down;
-                pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
-                pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
-                pointers[0].x = e.offsetX;
-                pointers[0].y = e.offsetY;
+            //     pointers[0].down = true;
+            //     pointers[0].color = colorArr;
+            //     pointers[0].moved = pointers[0].down;
+            //     pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
+            //     pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
+            //     pointers[0].x = e.offsetX;
+            //     pointers[0].y = e.offsetY;
 
-            });
+            // });
 
-            canvas.addEventListener('touchmove', function (e) {
+            // canvas.addEventListener('touchmove', function (e) {
 
-                e.preventDefault();
+            //     e.preventDefault();
 
-                let touches = e.targetTouches;
+            //     let touches = e.targetTouches;
 
-                count++;
+            //     count++;
 
-                (count > 25) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
+            //     (count > 25) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
 
-                for (let i = 0, len = touches.length; i < len; i++) {
+            //     for (let i = 0, len = touches.length; i < len; i++) {
 
-                    if (i >= pointers.length) pointers.push(new pointerPrototype());
+            //         if (i >= pointers.length) pointers.push(new pointerPrototype());
 
-                    pointers[i].id = touches[i].identifier;
-                    pointers[i].down = true;
-                    pointers[i].x = touches[i].pageX;
-                    pointers[i].y = touches[i].pageY;
-                    pointers[i].color = colorArr;
+            //         pointers[i].id = touches[i].identifier;
+            //         pointers[i].down = true;
+            //         pointers[i].x = touches[i].pageX;
+            //         pointers[i].y = touches[i].pageY;
+            //         pointers[i].color = colorArr;
 
-                    let pointer = pointers[i];
+            //         let pointer = pointers[i];
 
-                    pointer.moved = pointer.down;
-                    pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
-                    pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
-                    pointer.x = touches[i].pageX;
-                    pointer.y = touches[i].pageY;
+            //         pointer.moved = pointer.down;
+            //         pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
+            //         pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
+            //         pointer.x = touches[i].pageX;
+            //         pointer.y = touches[i].pageY;
 
-                }
+            //     }
 
-            }, false);
+            // }, false);
 
 
-            let player = new math.Vector2(width / 2, height / 2);
+            let player = new particle(width / 2, height / 2);
             // move player by some 2d noise
             const move = function (delay) {
 
                 const n = noise(xoff, yoff);
-                
-                player.setX(math.map(n, -1, 1, 0, width));
-                player.setY(math.map(n, -1, 1, 0, height));
+
+                const x = math.map(n, -1, 1, 0, width);
+                const y = math.map(n, -1, 1, 0, height);
+
+                player.update();
+                player.moveTo(x, y);
 
                 count++;
-                (count > 125) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
+                (count > 255) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
 
                 pointers[0].down = true;
                 pointers[0].color = colorArr;
                 pointers[0].moved = pointers[0].down;
-                pointers[0].dx = (player.x - pointers[0].x) * 10.0;
-                pointers[0].dy = (player.y - pointers[0].y) * 10.0;
-                pointers[0].x = player.x;
-                pointers[0].y = player.y;
+                pointers[0].dx = (player.position.x - pointers[0].x) * 10.0;
+                pointers[0].dy = (player.position.y - pointers[0].y) * 10.0;
+                pointers[0].x = player.position.x;
+                pointers[0].y = player.position.y;
 
                 setTimeout(move, delay, delay);
 
             };
 
-            setTimeout(move, 1000, 1000);
+            setTimeout(move, 1, 1);
 
 
         },
@@ -445,8 +450,8 @@ module.exports = function (canvas, ctx, options) {
             let dt = Math.min((Date.now() - lastTime) / 1000, 0.016);
             lastTime = Date.now();
 
-            xoff += 0.001;
-            yoff += 0.001;
+            xoff += 0.1;
+            yoff += 0.1;
 
             gl.viewport(0, 0, textureWidth, textureHeight);
 
