@@ -77,9 +77,9 @@ module.exports = function (canvas, ctx, options) {
             width = canvas.width;
             height = canvas.height;
 
-          // scale rows and cols to set resolution
-          rows = (height / resolution);
-          cols = (width / resolution);
+            // scale rows and cols to set resolution
+            rows = (height / resolution);
+            cols = (width / resolution);
 
             c_height = resolution;
             c_width = resolution;
@@ -126,7 +126,7 @@ module.exports = function (canvas, ctx, options) {
             for (let x = 0; x < cols; x++) {
 
                 angle += (0.0003 * x);
-                
+
                 for (let y = 0; y < rows; y++) {
 
                     fields[x][y] = noise(xoff, yoff, zoff);
