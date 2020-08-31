@@ -99,10 +99,9 @@ module.exports = function (canvas, ctx, options) {
          * Setup entry point
          * 
          * @param {HTMLCanvasElement} canvas
-         * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
          */
-        setup: function (canvas, ctx, options) {
+        setup: function (canvas, options) {
 
             width = canvas.width;
             height = canvas.height;

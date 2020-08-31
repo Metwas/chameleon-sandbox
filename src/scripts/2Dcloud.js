@@ -44,7 +44,7 @@ module.exports = function (canvas, ctx, options) {
 
     let rows = 0;
     let cols = 0;
-    let resolution = 10;
+    let resolution = 1;
 
     let c_height = 0;
     let c_width = 0;
@@ -57,7 +57,7 @@ module.exports = function (canvas, ctx, options) {
     let move = 0;
     let hue = 0;
     let inc = 0.015;
-    let speed = 0.005;
+    let speed = 0.0001;
 
     // simplex noise
     let noise = null;
@@ -72,7 +72,7 @@ module.exports = function (canvas, ctx, options) {
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
          */
-        setup: function (canvas, ctx, options) {
+        setup: function (canvas, options) {
 
             width = canvas.width;
             height = canvas.height;
@@ -131,9 +131,8 @@ module.exports = function (canvas, ctx, options) {
 
                     fields[x][y] = noise(xoff, yoff, zoff);
 
-                    const blue = (fields[x][y] * 255) + 350;
                     ctx.lineWidth = resolution;
-                    ctx.fillStyle = "rgb(" + fields[x][y] * 255 + "," + fields[x][y] * 255 + ", " + blue + ")";
+                    ctx.fillStyle = "rgb(" + fields[x][y] * 5 + "," + fields[x][y] * 155 + ", " + fields[x][y] * 5 + ")";
 
                     ctx.fillRect((x * resolution), (y * resolution), c_width, c_height);
 
