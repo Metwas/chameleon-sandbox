@@ -50,9 +50,9 @@ module.exports = function (canvas, ctx, options) {
     let noise = null;
 
     let config = {
-        TEXTURE_DOWNSAMPLE: 2,
-        DENSITY_DISSIPATION: 0.98,
-        VELOCITY_DISSIPATION: 0.99,
+        TEXTURE_DOWNSAMPLE: 1,
+        DENSITY_DISSIPATION: 0.992,
+        VELOCITY_DISSIPATION: 0.99999,
         PRESSURE_DISSIPATION: 0.1,
         PRESSURE_ITERATIONS: 25,
         CURL: 10,
@@ -202,6 +202,10 @@ module.exports = function (canvas, ctx, options) {
 
     let xoff = 0;
     let yoff = 0;
+    let zoff = 0;
+
+    let particles = [];
+    let particleCount = 5;
 
     const initFramebuffers = function () {
 
@@ -406,28 +410,44 @@ module.exports = function (canvas, ctx, options) {
             // }, false);
 
 
-            let player = new particle(width / 2, height / 2);
-            // move player by some 2d noise
+            for (let i = 0; i < particleCount; i++) {
+
+                particles.push(new particle(math.random(0, width), math.random(0, height), 0, 0, 1));
+                pointers.push(new pointerPrototype());
+
+            }
+
+            // move particles by some 2d noise
             const move = function (delay) {
 
-                const n = noise(xoff, yoff);
+                for (let i = 0; i < particles.length; i++) {
 
-                const x = math.map(n, -1, 1, 0, width);
-                const y = math.map(n, -1, 1, 0, height);
+                    const particle = particles[i];
 
-                player.update();
-                player.moveTo(x, y);
+                    const n = noise(xoff, yoff);
 
-                count++;
-                (count > 255) && (colorArr = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2], count = 0);
+                    const x = math.map(n, -1, 1, 0, width);
+                    const y = math.map(n, -1, 1, 0, height);
 
-                pointers[0].down = true;
-                pointers[0].color = colorArr;
-                pointers[0].moved = pointers[0].down;
-                pointers[0].dx = (player.position.x - pointers[0].x) * 10.0;
-                pointers[0].dy = (player.position.y - pointers[0].y) * 10.0;
-                pointers[0].x = player.position.x;
-                pointers[0].y = player.position.y;
+                    particle.update();
+                    particle.moveTo(x, y);
+
+                    particle.count = (particle.count || 0) + 1;
+                    color = [math.random(0.2, 0.5), math.random(0.2, 0.5), math.random(0.2, 0.5)];
+                    if (particle.count > 500) {
+                        color = [math.random(0.2, 0.5), math.random(0.2, 0.5), math.random(0.2, 0.5)];
+                        particle.count = 0;
+                    }
+
+                    pointers[i].down = true;
+                    pointers[i].color = color;
+                    pointers[i].moved = pointers[0].down;
+                    pointers[i].dx = (particle.position.x - pointers[i].x) * 10.0;
+                    pointers[i].dy = (particle.position.y - pointers[i].y) * 10.0;
+                    pointers[i].x = particle.position.x;
+                    pointers[i].y = particle.position.y;
+
+                }
 
                 setTimeout(move, delay, delay);
 
