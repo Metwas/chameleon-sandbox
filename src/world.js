@@ -28,23 +28,23 @@ const { utils } = require("broadleaf");
 // import smoke (turbulence) simulation
 const smoke = require("./scripts/smoke");
 // import boid script
-// const boid = require("./scripts/boids");
-// // import noise script
-// const noise = require("./scripts/noise");
-// // import 2d cloud simulation
-// const cloud = require("./scripts/2Dcloud");
-// // import ripple script
-// const ripple = require("./scripts/ripple");
-// // import isoSurface script
-// const isosurface = require("./scripts/isosurface");
-// // import game of life
-// const gameoflife = require("./scripts/gameoflife");
-// // import game of life
-// const noiseField = require("./scripts/noiseField");
-// // import marching cubes
-// const marchingCubes = require("./scripts/marchingcubes");
-// // import sierspinski carpet
-// const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
+const boid = require("./scripts/boids");
+// import noise script
+const noise = require("./scripts/noise");
+// import 2d cloud simulation
+const cloud = require("./scripts/2Dcloud");
+// import ripple script
+const ripple = require("./scripts/ripple");
+// import isoSurface script
+const isosurface = require("./scripts/isosurface");
+// import game of life
+const gameoflife = require("./scripts/gameoflife");
+// import game of life
+const noiseField = require("./scripts/noiseField");
+// import marching cubes
+const marchingCubes = require("./scripts/marchingcubes");
+// import sierspinski carpet
+const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 //======================== End Imports ========================//
 
@@ -91,8 +91,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = 128;
+    const height = 32;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
@@ -109,8 +109,8 @@ window.onload = function () {
     let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
     // Override options from setup, keeping defaults if undefined
-    utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options)));
-
+    utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options) || {}, options));
+    
     if (options.autoGetContext === true) {
         // get context
         ctx = canvas.getContext(options.contextName || "2d");
