@@ -29,7 +29,7 @@ const { Vector2 } = require("broadleaf/lib/math/math");
 
 //======================== End Imports ========================//
 
-function Particle(x, y, width, height) {
+function Particle(x, y, width, height, speed) {
 
     /**
      * Particle position
@@ -53,6 +53,13 @@ function Particle(x, y, width, height) {
     this.acceleration = new math.Vector2(math.random(0, 1), math.random(0, 1));
 
     /**
+     * Particle material friction
+     * 
+     * @type {Vector2}
+     */
+    this.friction = new math.Vector2(math.random(0.1, 0.2), math.random(0.1, 0.2));
+
+    /**
      * WIdth for this @see Particle
      * 
      * @type {Number} 
@@ -71,7 +78,7 @@ function Particle(x, y, width, height) {
      * 
      * @type {Number}
      */
-    this.limit = 4;
+    this.limit = speed || 1;
 
     /**
      * Body drawing callback function
@@ -109,27 +116,46 @@ function Particle(x, y, width, height) {
 }
 
 /**
+ * Global force strength
+ * 
+ * @type {Number}
+ */
+Particle.FORCE = 5;
+
+/**
  * Define @see Particle prototype
  */
 Particle.prototype = {
 
     moveTo: function (x, y) {
 
-        const target = new math.Vector2(x, y);
+        const force = this.getForce(x, y);
 
+        this.acceleration.setVector(force);
+        this.acceleration.multiplyVector(this.friction);
+
+    },
+
+    getForce: function (x, y) {
+
+        const target = new math.Vector2(x, y);
         // get directional force to the target
         const force = target.subVector(this.position);
-
         let forceSquared = force.magnitudeSquared();
 
         // clamp force to a given range
-        forceSquared = math.clamp(forceSquared, 25, 50);
-        // global gravitational strength
-        const g_strength = 5.5;
+        forceSquared = math.clamp(forceSquared, 100, 500);
+        // global gravitational strength1
+        const g_strength = Particle.FORCE;
 
         // update acceleration based on the force
-        force.setMagnitude((g_strength / forceSquared));
-        this.acceleration = force;
+        return force.setMagnitude((g_strength / forceSquared));
+
+    },
+
+    circle: function () {
+
+        const force = this.getForce(x, y);
 
     },
 
