@@ -32,10 +32,9 @@ const { utils, math } = require("broadleaf");
  * Represents an abstracted Led class
  * 
  * @param {Number} address 
- * @param {Object} color 
- * @param {Vector2} position
+ * @param {Object} styles
  */
-function Led(address, color, position, styles) {
+function Led(address, styles) {
 
     /**
      * Hexidecimal address for this @see Led instance
@@ -49,14 +48,14 @@ function Led(address, color, position, styles) {
      * 
      * @type {Vector2}
      */
-    this.position = new math.Vector2(position || { x: 0, y: 0 });
+    this.position = new math.Vector2((styles || {}).position || { x: 0, y: 0 });
 
     /**
      * Color for this @see Led instance in the on state
      * 
      * @type {Object}
      */
-    let color = utils.defaults(color, { dye: 0xff0000, base: 0x000000 });
+    let color = utils.defaults((styles || {}).color, { dye: 0xff0000, base: 0x000000 });
     Object.defineProperty(this, "color", {
         get() {
             return color;
