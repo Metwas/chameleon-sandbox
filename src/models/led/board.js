@@ -70,17 +70,26 @@ function Board(width, height, position, styles) {
 
 Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
 
-    initialize: function (i_ledType) {
+    /**
+     * Main initializer for @see Board instance
+     * 
+     * @param {Led} i_ledType 
+     * @param {Object} styles 
+     */
+    initialize: function (i_ledType, styles) {
 
-        if (i_ledType.prototype && !utils.isInstanceOf(i_led, Led)) {
+        /** ensure type is defined and is of @see Led derrived */
+        if (i_ledType.prototype && !utils.isInstanceOf(i_ledType.prototype, Led)) {
 
-        }
+            const length = this.width * this.height;
+            let index = 0;
 
-        const length = this.width * this.height;
-        let index = 0;
+            for (; index < length; index++) {
+                this.leds[index] = new i_ledType(index, styles || (this.styles || {}).led);
+            }
 
-        for (; index < length; index++) {
-            this.leds[index] = new i_led(index,)
+        } else {
+            console.warn("Invalid led type provided!");
         }
 
     },
