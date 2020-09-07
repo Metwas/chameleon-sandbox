@@ -37,20 +37,12 @@ const ScreenBuffer = require("./screenBuffer");
  * 
  * @param {Number} width 
  * @param {Number} height
- * @param {Vector2} position
  * @param {Object} styles
  */
-function Board(width, height, position, styles) {
+function Board(width, height, styles) {
 
     /** Construct base @see ScreenBuffer */
     ScreenBuffer.prototype.constructor.call(this, width, height, (styles || {}).alpha || false);
-
-    /**
-     * Optional @see Board x,y coordinates as a @see Vector2
-     * 
-     * @type {Vector2}
-     */
-    this.position = new math.Vector2(position || { x: 0, y: 0 });
 
     /**
      * Array of @see led instances
@@ -73,10 +65,11 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
     /**
      * Main initializer for @see Board instance
      * 
+     * @param {IRender} render
      * @param {Led} i_ledType 
      * @param {Object} styles 
      */
-    initialize: function (i_ledType, styles) {
+    initialize: function (render, i_ledType, styles) {
 
         /** ensure type is defined and is of @see Led derrived */
         if (i_ledType.prototype && !utils.isInstanceOf(i_ledType.prototype, Led)) {
@@ -85,7 +78,19 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
             let index = 0;
 
             for (; index < length; index++) {
-                this.leds[index] = new i_ledType(index, styles || (this.styles || {}).led);
+
+                this.leds[index] = new i_ledType(index, utils.isObjectLiteral(styles) ? styles : (this.styles || {}).led);
+                // set position automatically based on the styles autoplace boolean value
+                if (styles.autoplace === true) {
+
+                    this.leds[index].position = {
+                        x: x,
+                        y: y,
+                        z: z
+                    };
+
+                }
+
             }
 
         } else {
@@ -95,14 +100,26 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
     },
 
     /**
-     * Updates the @see Board vector position
+     * Applies the provided styles to the current @see Led instance
      * 
-     * @param {Number} x 
-     * @param {Number} y 
+     * @param {Styles} styles 
      */
-    setPosition: function (x, y) {
-        this.position.setVector(x, y);
-    },
+    loadStyles: function (styles) {
+
+        if (styles.led) {
+
+            const length = this.leds.length;
+            let index = 0;
+
+            for (; index < length; index++) {
+                this.leds[index].loadStyles(styles.led);
+            }
+
+        }
+
+        return this.styles = utils.defaults(styles, require("../design/styles"));
+
+    }
 
 });
 
