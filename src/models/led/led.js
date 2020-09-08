@@ -24,7 +24,7 @@
 //======================== Imports ========================//
 
 // import utilities
-const { utils, math } = require("broadleaf");
+const { utils } = require("broadleaf");
 
 //======================== End Imports ========================//
 
@@ -44,23 +44,11 @@ function Led(address, styles) {
     this.address = utils.isNumber(address) ? address : 0x00;
 
     /**
-     * Optional Led x,y coordinates as a @see Vector2
+     * Brightness of the led
      * 
-     * @type {Vector2}
+     * @type {Number}
      */
-    this.position = new math.Vector2((styles || {}).position || { x: 0, y: 0 });
-
-    /**
-     * Color for this @see Led instance in the on state
-     * 
-     * @type {Object}
-     */
-    let color = utils.defaults((styles || {}).color, { dye: 0xff0000, base: 0x000000 });
-    Object.defineProperty(this, "color", {
-        get() {
-            return color;
-        }
-    });
+    this.brightness = 100;
 
     /**
      * Led display state
@@ -81,31 +69,17 @@ function Led(address, styles) {
         set(value) {
 
             if (utils.isBoolean(value)) {
-
                 _state = value;
-                // update Led color
-                this.c_color = _state ? this.color.dye : this.color.base;
-
             }
 
         }
     });
 
-    this.styles = styles || {};
+    this.styles = utils.defaults(styles || {}, require("../design/styles"));
 
 }
 
 Led.prototype = {
-
-    /**
-     * Updates the @see Led vector position
-     * 
-     * @param {Number} x 
-     * @param {Number} y 
-     */
-    setPosition: function (x, y) {
-        this.position.setVector(x, y);
-    },
 
     /**
      * Toggles @see Led display state
@@ -122,8 +96,17 @@ Led.prototype = {
      * @param {Boolean} state 
      * @returns {Boolean}
      */
-    switch(state) {
+    switch: function (state) {
         return this.state = state;
+    },
+
+    /**
+     * Applies the provided styles to the current @see Led instance
+     * 
+     * @param {Styles} styles 
+     */
+    loadStyles: function (styles) {
+        return this.styles = utils.defaults(styles, require("../design/styles"));
     }
 
 };
