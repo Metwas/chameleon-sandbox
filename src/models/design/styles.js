@@ -21,18 +21,28 @@
      SOFTWARE.
 */
 
+//======================== Imports ========================//
+
+// import utilities
+const { utils } = require("broadleaf");
+
+//======================== End Imports ========================//
+
 module.exports = {
 
     /**
-     * x,y,z cartesian coordinates
+     * Objects width
      * 
-     * @type {Object}
+     * @type {Number}
      */
-    position: {
-        x: 0,
-        y: 0,
-        z: 0
-    },
+    width: 1,
+
+    /**
+     * Objects height
+     * 
+     * @type {Number}
+     */
+    height: 1,
 
     /**
      * Objects color
@@ -67,7 +77,7 @@ module.exports = {
         left: 5,
         top: 5,
         right: 5,
-        botton: 5
+        bottom: 5
     },
 
     /**
@@ -76,10 +86,41 @@ module.exports = {
      * @type {Margin}
      */
     margin: {
-        left: 2,
-        top: 2,
-        right: 2,
-        botton: 2
-    }
+        left: 5,
+        top: 5,
+        right: 5,
+        bottom: 5
+    },
+
+    /**
+     * Gets the total calculated area for a given object which defines a set of styles
+     * 
+     * @public
+     * @param {Object} obj 
+     * @returns {Object}
+     */
+    getObjectsArea: function (obj) {
+
+        // flatten to styles if defined and defaults are met
+        if ((!obj || {}).styles) {
+            return {
+                x: 0,
+                y: 0,
+                z: 0
+            }
+        };
+
+        // get x dimensions
+        const x = obj.styles.width + (obj.styles.margin.left + obj.styles.margin.right) + (obj.styles.padding.left + obj.styles.padding.right);
+        // get y dimensions
+        const y = obj.styles.height + (obj.styles.margin.top + obj.styles.margin.bottom) + (obj.styles.padding.top + obj.styles.padding.bottom);
+
+        return {
+            x: x,
+            y: y,
+            z: 0,
+        };
+
+    },
 
 };
