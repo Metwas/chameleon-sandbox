@@ -24,9 +24,9 @@
 //======================== Imports ========================//
 
 // import led base
-const led = require("./led");
+const Led = require("./led");
 // import utilities
-const { utils, math } = require("broadleaf");
+const { utils } = require("broadleaf");
 // import screen buffer (fbuffer)
 const ScreenBuffer = require("./screenBuffer");
 
@@ -49,14 +49,14 @@ function Board(width, height, styles) {
      * 
      * @type {Array<Led>}
      */
-    this.leds = new Array(this.width * this.height);
+    this.leds = [];
 
     /**
      * Board styles definition
      * 
      * @type {Object}
      */
-    this.styles = styles;
+    this.styles = utils.defaults(styles || {}, require("../design/styles"));
 
 }
 
@@ -65,31 +65,41 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
     /**
      * Main initializer for @see Board instance
      * 
-     * @param {IRender} render
+     * @public
      * @param {Led} i_ledType 
      * @param {Object} styles 
      */
-    initialize: function (render, i_ledType, styles) {
+    initialize: function (i_ledType, styles) {
 
         /** ensure type is defined and is of @see Led derrived */
         if (i_ledType.prototype && !utils.isInstanceOf(i_ledType.prototype, Led)) {
+
+            styles = ((styles || {}).led || styles) || this.styles.led;
 
             const length = this.width * this.height;
             let index = 0;
 
             for (; index < length; index++) {
 
-                this.leds[index] = new i_ledType(index, utils.isObjectLiteral(styles) ? styles : (this.styles || {}).led);
+                const led = new i_ledType(index, styles);
+
                 // set position automatically based on the styles autoplace boolean value
-                if (styles.autoplace === true) {
+                if (styles && styles.autoplace === true) {
 
-                    this.leds[index].position = {
-                        x: x,
-                        y: y,
-                        z: z
+                    const area = this.styles.getObjectsArea(led);
+                    // get index to coord calculations
+                    const i_coord = this.getCoordinatesFromIndex(index);
+
+                    led.position = {
+                        x: Math.floor(i_coord.x) * area.x,
+                        y: Math.floor(i_coord.y) * area.y,
+                        z: area.z
                     };
-
+                    
                 }
+                
+                // push to container
+                this.leds.push(led);
 
             }
 
@@ -102,6 +112,7 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
     /**
      * Applies the provided styles to the current @see Led instance
      * 
+     * @public
      * @param {Styles} styles 
      */
     loadStyles: function (styles) {
@@ -118,6 +129,26 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
         }
 
         return this.styles = utils.defaults(styles, require("../design/styles"));
+
+    },
+
+    /**
+     * Gets the x,y,z coordinates from the provided index value within a one-dimensional array
+     * 
+     * @public
+     * @param {Number} index
+     * @returns {Object}
+     */
+    getCoordinatesFromIndex: function (index) {
+
+        // formualae (for index): f(x) = b * width + a;
+        const a = index % this.width;
+        const b = index / this.width;
+
+        return {
+            x: a,
+            y: b
+        }
 
     }
 
