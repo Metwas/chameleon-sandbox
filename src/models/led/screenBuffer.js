@@ -57,6 +57,8 @@ function ScreenBuffer(width, height, channelType = "RGB") {
         }
     });
 
+    this.width = width;
+
     let _height = 0;
     Object.defineProperty(this, "height", {
         /**
@@ -77,8 +79,7 @@ function ScreenBuffer(width, height, channelType = "RGB") {
         }
     });
 
-    // alpha channel support
-    this.alpha = utils.isBoolean(alpha) ? alpha : false;
+    this.height = height;
 
     // calculate length for the buffer to be initialized
     const length = (this.width * this.height) * ScreenBuffer.getChannelLength(channelType);
