@@ -74,10 +74,10 @@ module.exports = {
      * @type {Margin}
      */
     padding: {
-        left: 5,
-        top: 5,
-        right: 5,
-        bottom: 5
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
     },
 
     /**
@@ -86,10 +86,10 @@ module.exports = {
      * @type {Margin}
      */
     margin: {
-        left: 5,
-        top: 5,
-        right: 5,
-        bottom: 5
+        left: 0.5,
+        top: 0.5,
+        right: 0.5,
+        bottom: 0.5
     },
 
     /**
