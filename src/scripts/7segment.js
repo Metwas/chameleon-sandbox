@@ -47,18 +47,30 @@ module.exports = function (canvas, ctx, options) {
     let rows = 0;
     let cols = 0;
     let resolution = 10;
-
+    let angle = 0;
     // matrice board ref
     let board = null;
     let IRenderer = null;
+
+    let boardPosition = null;
     // board styles 
     let boardStyles = {
+        color: {
+            background: "#333",
+            foreground: "#F11"
+        },
         led: {
             width: resolution,
             height: resolution,
             autoplace: true,
+            margin: {
+                left: 1,
+                top: 1,
+                right: 1,
+                bottom: 1
+            },
             color: {
-                background: "#333",
+                background: "#555",
                 foreground: "#F11"
             }
         }
@@ -79,13 +91,20 @@ module.exports = function (canvas, ctx, options) {
             height = canvas.height;
 
             // scale rows and cols to set resolution
-            rows = 16;
-            cols = 16;
+            rows = 32;
+            cols = 32;
 
-            board = new Board(cols, rows, boardStyles);
+            boardPosition = {
+                x: 0,
+                y: 0
+            }
+
+            board = new Board(cols, rows, boardPosition, boardStyles);
+             // center board on screen
+             board.center(width, height);
             // initialize board with a default monochrome led type
             board.initialize(require("../models/led/led"));
-            
+
             // create render instance
             // IRenderer = new I2Drenderer(canvas, options);
             // // attach board to render
@@ -107,19 +126,33 @@ module.exports = function (canvas, ctx, options) {
 
             const length = board.leds.length;
             let index = 0;
-            
+
             for (; index < length; index++) {
 
                 const led = board.leds[index];
                 const styles = led.styles;
-                
+
                 ctx.fillStyle = led.state ? styles.color.foreground : styles.color.background;
                 ctx.fillRect(led.position.x, led.position.y, styles.width, styles.height);
 
             }
 
-            const rnd = math.random(0, board.leds.length - 1, true);
-            board.leds[rnd].toggle();
+            angle += 1;
+            for (let y = 0; y < rows; y++) {
+
+                for (let x = 0; x < cols; x++) {
+
+                    const index = math.getMatrixIndex(x, y, cols);
+
+                    if ((x + angle) % 8 === 0) {
+                        board.leds[index].switch(true);
+                    } else {
+                        board.leds[index].switch(false);
+                    }
+
+                }
+
+            }
 
             // render all attached drawable objects
             // IRenderer.render(ctx, canvas);
