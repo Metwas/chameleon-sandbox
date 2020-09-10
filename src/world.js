@@ -25,12 +25,14 @@
 
 // import utilities
 const { utils } = require("broadleaf");
-// import smoke (turbulence) simulation
-const smoke = require("./scripts/smoke");
 // import boid script
 const boid = require("./scripts/boids");
+// import smoke (turbulence) simulation
+const smoke = require("./scripts/smoke");
 // import noise script
 const noise = require("./scripts/noise");
+// import 7segment script
+const led = require("./scripts/7segment");
 // import 2d cloud simulation
 const cloud = require("./scripts/2Dcloud");
 // import ripple script
@@ -50,7 +52,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = smoke;
+let script = led;
 
 /**
  * Global context options
@@ -91,8 +93,8 @@ let interval = -1;
 window.onload = function () {
 
     // get window dimensions
-    const width = 128;
-    const height = 32;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     // create canvas which fills the entire screen
     canvas = document.createElement("CANVAS");
