@@ -39,7 +39,7 @@ const ScreenBuffer = require("./screenBuffer");
  * @param {Number} height
  * @param {Object} styles
  */
-function Board(width, height, styles) {
+function Board(width, height, position, styles) {
 
     /** Construct base @see ScreenBuffer */
     ScreenBuffer.prototype.constructor.call(this, width, height, (styles || {}).alpha || false);
@@ -50,6 +50,13 @@ function Board(width, height, styles) {
      * @type {Array<Led>}
      */
     this.leds = [];
+
+    /**
+     * Position as a @see  math.Vector2
+     * 
+     * @type {math.Vector2}
+     */
+    this.position = position;
 
     /**
      * Board styles definition
@@ -91,13 +98,13 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
                     const i_coord = this.getCoordinatesFromIndex(index);
 
                     led.position = {
-                        x: Math.floor(i_coord.x) * area.x,
-                        y: Math.floor(i_coord.y) * area.y,
+                        x: this.position.x + Math.floor(i_coord.x) * area.x,
+                        y: this.position.y + Math.floor(i_coord.y) * area.y,
                         z: area.z
                     };
-                    
+
                 }
-                
+
                 // push to container
                 this.leds.push(led);
 
@@ -106,6 +113,23 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
         } else {
             console.warn("Invalid led type provided!");
         }
+
+    },
+
+    /**
+     * Centers the @see Board relative to the width and height arguments provided
+     * 
+     * @param {Number} width 
+     * @param {Number} height 
+     */
+    center: function (width, height) {
+
+        const area = this.styles.getObjectsArea({
+            styles: utils.defaults(this.styles.led, require("../design/styles"))
+        });
+
+        this.position.x = (width - (area.x * this.width)) / 2;
+        this.position.y = (height - (area.y * this.height)) / 2;
 
     },
 
