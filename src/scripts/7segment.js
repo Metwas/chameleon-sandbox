@@ -100,10 +100,37 @@ module.exports = function (canvas, ctx, options) {
             }
 
             board = new Board(cols, rows, boardPosition, boardStyles);
-             // center board on screen
-             board.center(width, height);
+            // center board on screen
+            board.center(width, height);
+
+            board.script = function (board) {
+
+                const rows = board.height;
+                const cols = board.width;
+                
+                // render scripts
+                angle += 1;
+                for (let y = 0; y < rows; y++) {
+
+                    for (let x = 0; x < cols; x++) {
+
+                        const index = math.getMatrixIndex(x, y, cols);
+                        // get current buffer value
+                        if ((x + y + angle) % 16 === 0) {
+                            board.buffer[index] = 255;
+                        } else {
+                            board.buffer[index] = 0;
+                        }
+
+                    }
+
+                }
+
+            };
+
             // initialize board with a default monochrome led type
             board.initialize(require("../models/led/led"));
+            window.board = board;
 
             // create render instance
             // IRenderer = new I2Drenderer(canvas, options);
@@ -137,22 +164,9 @@ module.exports = function (canvas, ctx, options) {
 
             }
 
-            angle += 1;
-            for (let y = 0; y < rows; y++) {
 
-                for (let x = 0; x < cols; x++) {
-
-                    const index = math.getMatrixIndex(x, y, cols);
-
-                    if ((x + angle) % 8 === 0) {
-                        board.leds[index].switch(true);
-                    } else {
-                        board.leds[index].switch(false);
-                    }
-
-                }
-
-            }
+            // update screenbuffer to leds
+            board.render();
 
             // render all attached drawable objects
             // IRenderer.render(ctx, canvas);
