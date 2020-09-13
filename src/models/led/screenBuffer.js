@@ -81,10 +81,11 @@ function ScreenBuffer(width, height, channelType = "RGB") {
 
     this.height = height;
 
+    this.channelLength = ScreenBuffer.getChannelLength(channelType);
     // calculate length for the buffer to be initialized
-    const length = (this.width * this.height) * ScreenBuffer.getChannelLength(channelType);
+    const length = (this.width * this.height) * this.channelLength;
     // an observable 8-bit clamped array, this will be the raw image data
-    this.buffer = new Array(length);
+    this.buffer = Buffer.from(new Array(length));
 
 }
 
@@ -139,7 +140,7 @@ ScreenBuffer.prototype = {
         }
 
         // get the first channel starting point
-        const channelLength = (this.alpha ? 4 : 3);
+        const channelLength = this.channelLength;
         const red = this.getMatrixIndex(x, y, channelLength);
         let index = 0;
         const indiceBuffer = [];
