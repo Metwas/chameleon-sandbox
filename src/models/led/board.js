@@ -26,7 +26,7 @@
 // import led base
 const Led = require("./led");
 // import utilities
-const { utils } = require("broadleaf");
+const { utils, math } = require("broadleaf");
 // import screen buffer (fbuffer)
 const ScreenBuffer = require("./screenBuffer");
 
@@ -42,7 +42,7 @@ const ScreenBuffer = require("./screenBuffer");
 function Board(width, height, position, styles) {
 
     /** Construct base @see ScreenBuffer */
-    ScreenBuffer.prototype.constructor.call(this, width, height, (styles || {}).alpha || false);
+    ScreenBuffer.prototype.constructor.call(this, width, height, "MONO");
 
     /**
      * Array of @see led instances
@@ -64,6 +64,13 @@ function Board(width, height, position, styles) {
      * @type {Object}
      */
     this.styles = utils.defaults(styles || {}, require("../design/styles"));
+
+    /**
+     * Default script for this board instance
+     * 
+     * @type {Function}
+     */
+    this.script = utils.noop;
 
 }
 
@@ -88,7 +95,7 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
 
             for (; index < length; index++) {
 
-                const led = new i_ledType(index, styles);
+                const led = new i_ledType(index, utils.clone(styles));
 
                 // set position automatically based on the styles autoplace boolean value
                 if (styles && styles.autoplace === true) {
@@ -109,6 +116,8 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
                 this.leds.push(led);
 
             }
+
+            this.scriptTimer = setTimeout(this.exeScript.bind(this), 50, 50);
 
         } else {
             console.warn("Invalid led type provided!");
@@ -154,6 +163,45 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
 
         return this.styles = utils.defaults(styles, require("../design/styles"));
 
+    },
+
+    /**
+     * Script execution
+     * 
+     * @private
+     */
+    exeScript: function(delay){
+
+        this.script(this);
+
+        this.scriptTimer = setTimeout(this.exeScript.bind(this), delay, delay);
+
+    },
+
+    /**
+     * Renders the buffer to the pixel data
+     * 
+     * @public
+     */
+    render: function () {
+
+        const rows = this.height;
+        const cols = this.width;
+
+        for (let y = 0; y < rows; y++) {
+
+            for (let x = 0; x < cols; x++) {
+
+                const index = math.getMatrixIndex(x, y, cols);
+                // get current buffer value
+                const b_value = this.buffer[index];
+
+                // switch led on based on the buffer value
+                this.leds[index].switch(!!b_value);
+
+            }
+
+        }
     },
 
     /**
