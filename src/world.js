@@ -32,7 +32,7 @@ const smoke = require("./scripts/smoke");
 // import noise script
 const noise = require("./scripts/noise");
 // import 7segment script
-const led = require("./scripts/7segment");
+const matrice = require("./scripts/matrice");
 // import 2d cloud simulation
 const cloud = require("./scripts/2Dcloud");
 // import ripple script
@@ -52,7 +52,7 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
 let canvas, ctx = {};
 // load desired script 
-let script = led;
+let script = matrice;
 
 /**
  * Global context options

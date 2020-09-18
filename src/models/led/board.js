@@ -173,7 +173,6 @@ Board.prototype = Object.assign(Object.create(ScreenBuffer.prototype), {
     exeScript: function(delay){
 
         this.script(this);
-
         this.scriptTimer = setTimeout(this.exeScript.bind(this), delay, delay);
 
     },
