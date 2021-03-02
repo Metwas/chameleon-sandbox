@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -30,9 +30,9 @@ const { utils, math } = require("broadleaf");
 
 /**
  * Noise blocks with configurable resolutions
- * 
+ *
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -65,7 +65,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -108,7 +108,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -123,7 +123,7 @@ module.exports = function (canvas, ctx, options) {
             for (let x = 0; x < cols; x++) {
 
                 angle += (0.0003 * x);
-                
+
                 for (let y = 0; y < rows; y++) {
 
                     fields[x][y] = noise(xoff, yoff, zoff);

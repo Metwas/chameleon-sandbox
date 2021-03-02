@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -32,11 +32,11 @@ const particle = require("../models/particle");
 
 /**
  * Smoke (turbulence simulation)
- * 
+ *
  * Original webGL code @link https://codepen.io/RustamAbraham/pen/jYLXZm
- * 
+ *
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -314,7 +314,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {Object} options
          */
@@ -460,7 +460,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -23,12 +23,12 @@
 
 /**
  * Water ripple effect.
- * Original code was in Java created by Neil Wallis 
+ * Original code was in Java created by Neil Wallis
  * @link http://www.neilwallis.com/java/water.html
- * 
+ *
  * Created a javascript version which supports the chameleon world work-flow
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -50,13 +50,13 @@ module.exports = function (canvas, ctx, options) {
     let lastMap = [];
     let rippleMap = [];
 
-    // cache pixel data 
+    // cache pixel data
     let texture = {};
     let ripple = {};
 
     /**
      * Creates a radial diffuse at the specified points
-     * 
+     *
      * @param {Number} x
      * @param {Number} y
      * @param {Object} ctx
@@ -77,7 +77,7 @@ module.exports = function (canvas, ctx, options) {
 
             for (let j = x - radius; j < x + radius; j++) {
 
-                // add diffused 
+                // add diffused
                 container[index + (i * width) + j] += spread;
 
             }
@@ -93,7 +93,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -129,7 +129,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

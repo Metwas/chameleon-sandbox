@@ -1,7 +1,7 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
@@ -30,9 +30,9 @@ const { utils, math } = require("broadleaf");
 
 /**
  * Noise field
- * 
+ *
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -60,9 +60,9 @@ module.exports = function (canvas, ctx, options) {
 
     /**
     * Line helper for the marching cubes
-    * 
-    * @param {math.Vector2} x1 
-    * @param {math.Vector2} x2 
+    *
+    * @param {math.Vector2} x1
+    * @param {math.Vector2} x2
     */
     let line = function (x1, x2, color, weight, rotate) {
 
@@ -85,7 +85,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -119,7 +119,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

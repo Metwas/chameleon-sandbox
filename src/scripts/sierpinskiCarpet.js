@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -23,10 +23,10 @@
 
 /**
  * Sierpinski carpet is a block-style design which is created by recursion
- * 
+ *
  * Created a javascript version which supports the chameleon world work-flow
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -38,9 +38,9 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Main recursive handler class
-     * 
+     *
      * Original code was from Steffen @see http://www.jakob.at/html5/sierpinskicarpet.html
-     * 
+     *
      * @param {Number} x
      * @param {Number} y
      * @param {HTMLCanvasElement} canvas
@@ -61,7 +61,7 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Draw a Sierpinski carpet with the given recursion depth
-     * 
+     *
      * @param {Number} depth
      */
     Sierpinski.prototype.drawSierpinskiCarpet = function (depth) {
@@ -83,7 +83,7 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Draw a filled rectangle which is defined by the upper left corner
-     * 
+     *
      * @param {Number} x
      * @param {Number} y
      * @param {Number} size
@@ -94,7 +94,7 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Cut the square into 9 subsquares. Remove the center square (sets the color to black)
-     * 
+     *
      * @param {Number} x
      * @param {Number} y
      * @param {Number} size
@@ -192,7 +192,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -225,7 +225,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -34,9 +34,9 @@ const { utils, math } = require("broadleaf");
 
 /**
  * Flocking simulation
- * 
+ *
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -59,7 +59,7 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Triangle drawing helper function
-     * 
+     *
      * @param {Object} options
      */
     let triangle = function (options) {
@@ -120,12 +120,12 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Triangle boid creation helper
-     * 
-     * @param {Number} x 
-     * @param {Number} y 
-     * @param {Number} width 
-     * @param {Number} height 
-     * @param {String} color 
+     *
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} width
+     * @param {Number} height
+     * @param {String} color
      * @returns {boidBody}
      */
     const createTriangleBoid = function (x, y, width, height, color) {
@@ -139,7 +139,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -152,7 +152,7 @@ module.exports = function (canvas, ctx, options) {
             height = canvas.height;
 
             simplex_octave = math.createNoise();
-            // create simplex noise 
+            // create simplex noise
             noise = function (x, y) {
 
                 // get 1st octave noise
@@ -202,7 +202,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

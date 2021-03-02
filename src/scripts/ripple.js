@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -30,9 +30,9 @@ const { utils, math } = require("broadleaf");
 
 /**
  * Water ripple effect
- * 
+ *
  * @author Metwas
- * 
+ *
  * @param {HTMLCanvasElement} canvas
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
@@ -60,9 +60,9 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Vector argument validator
-     * 
-     * @param {Any} arg 
-     * @param {Number} length 
+     *
+     * @param {Any} arg
+     * @param {Number} length
      */
     const isValidVecArgs = function (arg, length) {
         return utils.isInstanceOf(arg, math.Vector2) && arguments.length >= length;
@@ -70,36 +70,36 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Fish model to disturb the water
-     * 
-     * @param {Number | math.Vector2} x 
-     * @param {Number} y 
+     *
+     * @param {Number | math.Vector2} x
+     * @param {Number} y
      */
     function fish(x, y, radius, speed) {
 
         /**
          * Radius of this @see fish instance
-         * 
+         *
          * @type {Number}
          */
         this.radius = isValidVecArgs(x, 3) ? (radius || 1) : (y || 1);
 
         /**
          * Cartesian coordinate for a @see fish
-         * 
+         *
          * @type {math.Vector2}
          */
         this.position = isValidVecArgs(x, 1) ? x : new math.Vector2(x, y);
 
         /**
          * Sets a target for the @see fish e.g food
-         * 
+         *
          * @type {math.Vector2}
          */
         this.target = new math.Vector2(this.position.x, this.position.y);
 
         /**
          * Speed of this @see fish instance
-         * 
+         *
          * @type {Number}
          */
         this.speed = isValidVecArgs(x, 4) ? (speed || 0.5) : (radius || 0.5);
@@ -113,12 +113,12 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Moves the @see fish to the specified point in a given time (in seconds)
-         * 
-         * @param {Number} x 
-         * @param {Number} y 
+         *
+         * @param {Number} x
+         * @param {Number} y
          */
         moveTo: function (x, y) {
-            
+
             this.target.setX(x);
             this.target.setY(y);
 
@@ -126,9 +126,9 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Updates the set pixels based on the @see fish instance properties
-         * 
+         *
          * @param {Number} time
-         * @param {Buffer} buffer 
+         * @param {Buffer} buffer
          */
         update: function (time, buffer) {
 
@@ -151,10 +151,10 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Catesian coordinate to index helper function
-     * 
-     * @param {Number} x 
-     * @param {Number} y 
-     * @param {Array} array 
+     *
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Array} array
      * @returns {Any}
      */
     const getIndexedValue = function (x, y, width, array, rgb) {
@@ -179,17 +179,17 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Two dimensional array creation helper
-     * 
-     * @param {Number} width 
-     * @param {Number} height 
-     * @param {Number | Array | Buffer | Image} value 
+     *
+     * @param {Number} width
+     * @param {Number} height
+     * @param {Number | Array | Buffer | Image} value
      * @returns {Array}
      */
     const create2DBuffer = function (width, height, value) {
 
         const temp = [];
 
-        // setup buffers    
+        // setup buffers
         for (let y = 0; y < height; y++) {
 
             temp[y] = [];
@@ -209,10 +209,10 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Helper for assigning the state buffers ( @see current & @see previous )
-     * 
+     *
      * @param {Array | Image | Buffer} value
-     * @param {Number} width 
-     * @param {Number} height 
+     * @param {Number} width
+     * @param {Number} height
      */
     const setupBuffers = function (value, width, height) {
         current = create2DBuffer(width, height, value);
@@ -221,7 +221,7 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Periodically creates a raindrop effect
-     * 
+     *
      * @param {Number} delay
      */
     const raindrop = function (delay) {
@@ -239,14 +239,14 @@ module.exports = function (canvas, ctx, options) {
 
     /**
      * Periodically steers the fishies
-     * 
+     *
      * @param {Number} delay
      */
     const fishy = function (delay) {
 
         const length = fishes.length;
         let index = 0;
-        
+
         // update damping
 
         for (; index < length; index++) {
@@ -287,7 +287,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Setup entry point
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options
@@ -336,7 +336,7 @@ module.exports = function (canvas, ctx, options) {
 
         /**
          * Main loop
-         * 
+         *
          * @param {HTMLCanvasElement} canvas
          * @param {CanvasRenderingContext2D} ctx
          * @param {Object} options

@@ -1,14 +1,14 @@
 /*
      MIT License
-     Copyright (c) 2020 Metwas
-     
+     Copyright (c) Metwas
+
      Permission is hereby granted, free of charge, to any person obtaining a copy
      of this software and associated documentation files (the "Software"), to deal
      in the Software without restriction, including without limitation the rights
      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      copies of the Software, and to permit persons to whom the Software is
      furnished to do so, subject to the following conditions:
-     
+
      The above copyright notice and this permission notice shall be included in all
      copies or substantial portions of the Software.
 
@@ -51,33 +51,33 @@ const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 //======================== End Imports ========================//
 
 let canvas, ctx = {};
-// load desired script 
+// load desired script
 let script = matrice;
 
 /**
  * Global context options
- * 
+ *
  * @type {Object}
  */
 let options = {
 
     /**
      * Option to suppress automatic resize control
-     * 
+     *
      * @type {Boolean}
      */
     suppressResize: false,
 
     /**
      * Automatically gets the context for the script
-     * 
+     *
      * @type {Boolean}
      */
     autoGetContext: true,
 
     /**
      * Default rendering context name (2D)
-     * 
+     *
      * @type {String}
      */
     contextType: "2d"
@@ -112,7 +112,7 @@ window.onload = function () {
 
     // Override options from setup, keeping defaults if undefined
     utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options) || {}, options));
-    
+
     if (options.autoGetContext === true) {
         // get context
         ctx = canvas.getContext(options.contextName || "2d");
@@ -162,7 +162,7 @@ const M_FRAME = function (loop, fps, canvas, ctx, options) {
 
 /**
  * Update canvas dimensions when the window resizes
- * 
+ *
  * @param {Event} event
  */
 window.onresize = function (event) {
@@ -170,4 +170,3 @@ window.onresize = function (event) {
     canvas.setAttribute("width", window.innerWidth);
     canvas.setAttribute("height", window.innerHeight);
 };
-
