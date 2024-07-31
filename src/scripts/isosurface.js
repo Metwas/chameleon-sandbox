@@ -39,163 +39,173 @@ const { utils, math } = require("broadleaf");
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} options
  */
-module.exports = function (canvas, ctx, options) {
+module.exports = function (canvas, ctx, options)
+{
 
-    let height = 0;
-    let width = 0;
+       let height = 0;
+       let width = 0;
 
-    let blobs = [];
-    let blobCount = 10;
+       let blobs = [];
+       let blobCount = 5;
 
-    let r_angle = 0;
-    let g_angle = 0;
-    let b_angle = 0;
-    let t_angle = 0;
-    let r_target = 0;
-    let g_target = 0;
-    let b_target = 0;
+       let r_angle = 0;
+       let g_angle = 0;
+       let b_angle = 0;
+       let t_angle = 0;
+       let r_target = 0;
+       let g_target = 0;
+       let b_target = 0;
 
-    // simplex noise
-    let noise = null;
+       // simplex noise
+       let noise = null;
 
-    /** Return chameleon sketch template */
-    return {
+       /** Return chameleon sketch template */
+       return {
 
-        /**
-         * Setup entry point
-         *
-         * @param {HTMLCanvasElement} canvas
-         * @param {CanvasRenderingContext2D} ctx
-         * @param {Object} options
-         */
-        setup: function (canvas, ctx, options) {
+              /**
+               * Setup entry point
+               *
+               * @param {HTMLCanvasElement} canvas
+               * @param {CanvasRenderingContext2D} ctx
+               * @param {Object} options
+               */
+              setup: function (canvas, ctx, options)
+              {
 
-            console.log("Setup initialized");
+                     console.log("Setup initialized");
 
-            width = canvas.width;
-            height = canvas.height;
+                     width = canvas.width;
+                     height = canvas.height;
 
-            noise = math.simplex.createNoise();
-            math.simplex.noiseDetail(8);
+                     noise = math.simplex.createNoise();
+                     math.simplex.noiseDetail(8);
 
-            // empty boids container
-            blobs = [];
+                     // empty boids container
+                     blobs = [];
 
-            // add canvas mouse-move event listener
-            canvas.onmousemove = function (event) {
-                mouseX = event.offsetX || event.layerX;
-                mouseY = event.offsetY || event.layerY;
-            };
+                     // add canvas mouse-move event listener
+                     canvas.onmousemove = function (event)
+                     {
+                            mouseX = event.offsetX || event.layerX;
+                            mouseY = event.offsetY || event.layerY;
+                     };
 
-            r_target = math.random(100, 255);
-            g_target = math.random(100, 255);
-            b_target = math.random(100, 255);
+                     r_target = math.random(100, 255);
+                     g_target = math.random(100, 255);
+                     b_target = math.random(100, 255);
 
-            min = Math.min(width, height);
+                     min = Math.min(width, height);
 
-            // initialize boid body
-            for (let i = 0; i < blobCount; i++) {
+                     // initialize boid body
+                     for (let i = 0; i < blobCount; i++)
+                     {
 
-                const x = math.random(0, width, true);
-                const y = math.random(0, height, true);
-                const radius = math.random(min * 1.5, min * 2, true);
+                            const x = math.random(0, width, true);
+                            const y = math.random(0, height, true);
+                            const radius = math.random(min * 1.5, min * 2, true);
 
-                // create boid & boidBody
-                blobs.push(new blob(x, y, radius));
+                            // create boid & boidBody
+                            blobs.push(new blob(x, y, radius));
 
-            }
+                     }
 
-        },
+              },
 
-        /**
-         * Main loop
-         *
-         * @param {HTMLCanvasElement} canvas
-         * @param {CanvasRenderingContext2D} ctx
-         * @param {Object} options
-         */
-        loop: function (canvas, ctx, options) {
+              /**
+               * Main loop
+               *
+               * @param {HTMLCanvasElement} canvas
+               * @param {CanvasRenderingContext2D} ctx
+               * @param {Object} options
+               */
+              loop: function (canvas, ctx, options)
+              {
 
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, width, height);
+                     ctx.fillStyle = "black";
+                     ctx.fillRect(0, 0, width, height);
 
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const pixels = imageData.data;
+                     const imageData = ctx.getImageData(0, 0, width, height);
+                     const pixels = imageData.data;
 
-            const xLength = width * 4;
-            const yLength = height * 4;
+                     const xLength = width * 4;
+                     const yLength = height * 4;
 
-            t_angle += 0.01;
+                     t_angle += 0.01;
 
-            if (t_angle > 1) {
-                t_angle = 0;
-            }
-            //r_angle = math.lerp(r_angle, r_target, t_angle);
-            g_angle = math.lerp(r_angle, g_target, t_angle);
-            b_angle = math.lerp(r_angle, b_target, t_angle);
 
-            if (r_angle >= r_target) {
-                r_target = math.random(10, 20);
-            }
+                     //r_angle = math.lerp(r_angle, r_target, t_angle);
+                     g_angle = math.lerp(r_angle, g_target, t_angle);
+                     b_angle = math.lerp(r_angle, b_target, t_angle);
 
-            if (g_angle >= g_target) {
-                g_target = math.random(10, 20);
-            }
+                     if (r_angle >= r_target)
+                     {
+                            r_target = math.random(10, 20);
+                     }
 
-            if (b_angle >= b_target) {
-                b_target = math.random(10, 20);
-            }
+                     if (g_angle >= g_target)
+                     {
+                            g_target = math.random(10, 20);
+                     }
 
-            for (let y = 0; y < yLength; y += 4) {
+                     if (b_angle >= b_target)
+                     {
+                            b_target = math.random(10, 20);
+                     }
 
-                for (let x = 0; x < xLength; x += 4) {
+                     for (let y = 0; y < yLength; y += 4)
+                     {
 
-                    const index = x + y * width;
+                            for (let x = 0; x < xLength; x += 4)
+                            {
 
-                    const length = blobs.length;
-                    let _index = 0;
-                    let iso = 0;
+                                   const index = x + y * width;
 
-                    for (; _index < length; _index++) {
+                                   const length = blobs.length;
+                                   let _index = 0;
+                                   let iso = 0;
 
-                        let x0 = (x / 4) - blobs[_index].position.x;
-                        let y0 = (y / 4) - blobs[_index].position.y;
+                                   for (; _index < length; _index++)
+                                   {
 
-                        let distance = Math.sqrt(x0 * x0 + y0 * y0);
-                        iso += (10 * blobs[_index].radius) / distance;
+                                          let x0 = (x / 4) - blobs[ _index ].position.x;
+                                          let y0 = (y / 4) - blobs[ _index ].position.y;
 
-                    }
+                                          let distance = Math.sqrt(x0 * x0 + y0 * y0);
+                                          iso += (10 * blobs[ _index ].radius) / distance;
 
-                    // red channel
-                    pixels[index] = iso;
-                    // green channel
-                    pixels[index + 1] = 125 - (iso % g_angle);
-                    pixels[index + 2] = 125 - (iso % b_angle);
-                    // alpha channel
-                    pixels[index + 3] = 255;
+                                   }
 
-                }
+                                   // red channel
+                                   pixels[ index ] = iso;
+                                   // green channel
+                                   pixels[ index + 1 ] = 125 - (iso % g_angle);
+                                   pixels[ index + 2 ] = 125 - (iso % b_angle);
+                                   // alpha channel
+                                   pixels[ index + 3 ] = 255;
 
-            }
+                            }
 
-            // update canvas pixels
-            ctx.putImageData(imageData, 0, 0);
+                     }
 
-            const length = blobs.length;
-            let _index = 0;
+                     // update canvas pixels
+                     ctx.putImageData(imageData, 0, 0);
 
-            for (; _index < length; _index++) {
+                     const length = blobs.length;
+                     let _index = 0;
 
-                // update blobs
-                blobs[_index].update({
-                    width: width,
-                    height: height
-                });
+                     for (; _index < length; _index++)
+                     {
 
-            }
+                            // update blobs
+                            blobs[ _index ].update({
+                                   width: width,
+                                   height: height
+                            });
 
-        }
+                     }
 
-    };
+              }
+
+       };
 
 };

@@ -23,36 +23,24 @@
 
 //======================== Imports ========================//
 
-// import utilities
 const { utils } = require("broadleaf");
-// import boid script
 const boid = require("./scripts/boids");
-// import smoke (turbulence) simulation
 const smoke = require("./scripts/smoke");
-// import noise script
 const noise = require("./scripts/noise");
-// import 7segment script
 const matrice = require("./scripts/matrice");
-// import 2d cloud simulation
 const cloud = require("./scripts/2Dcloud");
-// import ripple script
 const ripple = require("./scripts/ripple");
-// import isoSurface script
 const isosurface = require("./scripts/isosurface");
-// import game of life
 const gameoflife = require("./scripts/gameoflife");
-// import game of life
 const noiseField = require("./scripts/noiseField");
-// import marching cubes
 const marchingCubes = require("./scripts/marchingcubes");
-// import sierspinski carpet
 const sierpinskiCarpet = require("./scripts/sierpinskiCarpet");
 
-//======================== End Imports ========================//
+//========================        ========================//
 
 let canvas, ctx = {};
 // load desired script
-let script = matrice;
+let script = cloud;
 
 /**
  * Global context options
@@ -61,101 +49,106 @@ let script = matrice;
  */
 let options = {
 
-    /**
-     * Option to suppress automatic resize control
-     *
-     * @type {Boolean}
-     */
-    suppressResize: false,
+       /**
+        * Option to suppress automatic resize control
+        *
+        * @type {Boolean}
+        */
+       suppressResize: false,
 
-    /**
-     * Automatically gets the context for the script
-     *
-     * @type {Boolean}
-     */
-    autoGetContext: true,
+       /**
+        * Automatically gets the context for the script
+        *
+        * @type {Boolean}
+        */
+       autoGetContext: true,
 
-    /**
-     * Default rendering context name (2D)
-     *
-     * @type {String}
-     */
-    contextType: "2d"
+       /**
+        * Default rendering context name (2D)
+        *
+        * @type {String}
+        */
+       contextType: "2d"
 
 };
 
 // main loop interval reference
-let interval = -1;
+let interval = 0;
 
 /**
  * Executes on window startup
  */
-window.onload = function () {
+window.onload = function ()
+{
 
-    // get window dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+       // get window dimensions
+       const width = window.innerWidth;
+       const height = window.innerHeight;
 
-    // create canvas which fills the entire screen
-    canvas = document.createElement("CANVAS");
-    // update dimensions
-    canvas.setAttribute("width", width);
-    canvas.setAttribute("height", height);
+       // create canvas which fills the entire screen
+       canvas = document.createElement("CANVAS");
+       // update dimensions
+       canvas.setAttribute("width", width);
+       canvas.setAttribute("height", height);
 
-    // append to body
-    document.body.appendChild(canvas);
+       // append to body
+       document.body.appendChild(canvas);
 
-    // attempt to run at 120 fps
-    let fps = 0;
-    // create global context for the script template
-    let target = utils.isFunction(script) ? script.call({}, canvas) : {};
+       // attempt to run at 120 fps
+       let fps = interval;
+       // create global context for the script template
+       let target = utils.isFunction(script) ? script.call({}, canvas) : {};
 
-    // Override options from setup, keeping defaults if undefined
-    utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options) || {}, options));
+       // Override options from setup, keeping defaults if undefined
+       utils.isFunction(target.setup) && (options = utils.defaults(target.setup(canvas, options) || {}, options));
 
-    if (options.autoGetContext === true) {
-        // get context
-        ctx = canvas.getContext(options.contextName || "2d");
-    }
+       if (options.autoGetContext === true)
+       {
+              // get context
+              ctx = canvas.getContext(options.contextName || "2d");
+       }
 
-    // ensure script has a defined loop
-    !utils.isFunction(target.loop) && (script.loop = utils.noop);
+       // ensure script has a defined loop
+       !utils.isFunction(target.loop) && (script.loop = utils.noop);
 
-    // setup request frame
-    M_FRAME(target.loop, fps, canvas, ctx, options);
+       // setup request frame
+       M_FRAME(target.loop, fps, canvas, ctx, options);
 
 };
 
 /**
  * Main application/world loop
  */
-const M_FRAME = function (loop, fps, canvas, ctx, options) {
+const M_FRAME = function (loop, fps, canvas, ctx, options)
+{
 
-    let _fps = fps;
-    const _loop = loop;
-    const _canvas = canvas;
-    const _ctx = ctx;
-    const _options = options;
+       let _fps = fps;
+       const _loop = loop;
+       const _canvas = canvas;
+       const _ctx = ctx;
+       const _options = options;
 
-    // normal frame by frame rendering method
-    const M_REQUEST_FRAME = function () {
+       // normal frame by frame rendering method
+       const M_REQUEST_FRAME = function ()
+       {
 
-        _loop.call(null, _canvas, _ctx, _options);
-        // render another frame
-        window.requestAnimationFrame(M_REQUEST_FRAME);
+              _loop.call(null, _canvas, _ctx, _options);
+              // render another frame
+              window.requestAnimationFrame(M_REQUEST_FRAME);
 
-    };
+       };
 
-    // timer based frame rendering method
-    const M_TIMER_FRAME = function () {
+       // timer based frame rendering method
+       const M_TIMER_FRAME = function ()
+       {
 
-        _loop.call(null, _canvas, _ctx, _options);
-        // render another frame within a set timeout
-        interval = setTimeout(M_TIMER_FRAME, _fps);
+              _loop.call(null, _canvas, _ctx, _options);
+              // render another frame within a set timeout
+              interval = setTimeout(M_TIMER_FRAME, _fps);
 
-    };
+       };
 
-    return fps > 0 ? M_TIMER_FRAME() : M_REQUEST_FRAME();
+       return fps > 0 ? M_TIMER_FRAME() : M_REQUEST_FRAME();
 
 };
 
@@ -165,8 +158,9 @@ const M_FRAME = function (loop, fps, canvas, ctx, options) {
  *
  * @param {Event} event
  */
-window.onresize = function (event) {
-    // update dimensions
-    canvas.setAttribute("width", window.innerWidth);
-    canvas.setAttribute("height", window.innerHeight);
+window.onresize = function (event)
+{
+       // update dimensions
+       canvas.setAttribute("width", window.innerWidth);
+       canvas.setAttribute("height", window.innerHeight);
 };
